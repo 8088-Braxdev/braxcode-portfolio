@@ -1,0 +1,1837 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BraxCode Digitals Foundation ⚡</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+    <style>
+      :root {
+        --bg: #050507;
+        --bg2: #0a0a0f;
+        --bg3: #0f0f18;
+        --coral: #ff4c4c;
+        --coral2: #ff6b6b;
+        --coral-dim: rgba(255, 76, 76, 0.12);
+        --coral-glow: rgba(255, 76, 76, 0.35);
+        --glass: rgba(255, 255, 255, 0.04);
+        --glass2: rgba(255, 255, 255, 0.07);
+        --glass3: rgba(255, 255, 255, 0.02);
+        --border: rgba(255, 255, 255, 0.07);
+        --border2: rgba(255, 76, 76, 0.25);
+        --text: #f0f0f0;
+        --text2: #999;
+        --text3: #555;
+        --user-bg: rgba(255, 76, 76, 0.08);
+        --font-h: "Orbitron", sans-serif;
+        --font-b: "Rajdhani", sans-serif;
+        --font-c: "JetBrains Mono", monospace;
+      }
+
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { height: 100%; overflow: hidden; }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font-b);
+        display: flex;
+        height: 100dvh;
+        letter-spacing: 0.3px;
+        cursor: default;
+      }
+
+      /* ===== NOISE OVERLAY ===== */
+      body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0.4;
+      }
+
+      /* ===== AMBIENT ORBS ===== */
+      .orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        pointer-events: none;
+        z-index: 0;
+      }
+      .orb1 { width: 400px; height: 400px; background: rgba(255,76,76,0.06); top: -100px; right: -100px; animation: orbFloat 8s ease-in-out infinite; }
+      .orb2 { width: 300px; height: 300px; background: rgba(255,76,76,0.04); bottom: -50px; left: -50px; animation: orbFloat 12s ease-in-out infinite reverse; }
+      .orb3 { width: 200px; height: 200px; background: rgba(150,50,255,0.03); top: 50%; left: 50%; animation: orbFloat 10s ease-in-out infinite 3s; }
+
+      @keyframes orbFloat {
+        0%, 100% { transform: translate(0,0) scale(1); }
+        33% { transform: translate(20px,-20px) scale(1.05); }
+        66% { transform: translate(-15px,15px) scale(0.95); }
+      }
+
+      /* ============================
+         SPLASH SCREEN
+      ============================*/
+      #splash {
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        transition: opacity 0.8s ease, transform 0.8s ease;
+      }
+
+      #splash.hide {
+        opacity: 0;
+        transform: scale(1.05);
+        pointer-events: none;
+      }
+
+      /* LOGO SVG */
+      .splash-logo {
+        width: 130px;
+        height: 130px;
+        margin-bottom: 36px;
+        position: relative;
+        animation: logoEntrance 1s cubic-bezier(0.16,1,0.3,1) forwards;
+        opacity: 0;
+      }
+
+      @keyframes logoEntrance {
+        0% { opacity: 0; transform: scale(0.5) rotate(-20deg); }
+        100% { opacity: 1; transform: scale(1) rotate(0deg); }
+      }
+
+      .logo-svg { width: 100%; height: 100%; filter: drop-shadow(0 0 20px var(--coral-glow)); }
+
+      /* Pulse rings */
+      .pulse-ring {
+        position: absolute;
+        inset: -20px;
+        border-radius: 50%;
+        border: 1px solid var(--coral-glow);
+        animation: pulseRing 2s ease-out infinite;
+        opacity: 0;
+      }
+      .pulse-ring:nth-child(2) { animation-delay: 0.6s; }
+      .pulse-ring:nth-child(3) { animation-delay: 1.2s; }
+
+      @keyframes pulseRing {
+        0% { transform: scale(0.8); opacity: 0.6; }
+        100% { transform: scale(1.6); opacity: 0; }
+      }
+
+      .splash-tagline {
+        font-family: var(--font-h);
+        font-size: clamp(0.55rem, 2vw, 0.7rem);
+        letter-spacing: 6px;
+        color: var(--coral);
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        opacity: 0;
+        animation: fadeUp 0.8s ease forwards 0.8s;
+      }
+
+      .splash-name {
+        font-family: var(--font-h);
+        font-size: clamp(1.2rem, 5vw, 2rem);
+        font-weight: 900;
+        color: var(--text);
+        letter-spacing: 2px;
+        text-align: center;
+        opacity: 0;
+        animation: fadeUp 0.8s ease forwards 1s;
+        margin-bottom: 6px;
+      }
+
+      .splash-sub {
+        font-size: 0.85rem;
+        color: var(--text2);
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        opacity: 0;
+        animation: fadeUp 0.8s ease forwards 1.2s;
+        margin-bottom: 48px;
+        font-family: var(--font-c);
+      }
+
+      .splash-enter-btn {
+        padding: 14px 44px;
+        background: transparent;
+        border: 1px solid var(--coral);
+        color: var(--coral);
+        font-family: var(--font-h);
+        font-size: 0.72rem;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-radius: 4px;
+        position: relative;
+        overflow: hidden;
+        opacity: 0;
+        animation: fadeUp 0.8s ease forwards 1.6s;
+        transition: color 0.3s, box-shadow 0.3s;
+      }
+
+      .splash-enter-btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: var(--coral);
+        transform: translateX(-101%);
+        transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+        z-index: -1;
+      }
+
+      .splash-enter-btn:hover {
+        color: #000;
+        box-shadow: 0 0 30px var(--coral-glow);
+      }
+      .splash-enter-btn:hover::before { transform: translateX(0); }
+
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ============================
+         PROFILE SETUP MODAL
+      ============================*/
+      #profileSetup {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.85);
+        backdrop-filter: blur(20px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 900;
+        padding: 20px;
+      }
+
+      #profileSetup.show { display: flex; }
+
+      .setup-card {
+        background: linear-gradient(135deg, rgba(255,76,76,0.06), rgba(255,255,255,0.03));
+        border: 1px solid var(--border2);
+        border-radius: 24px;
+        padding: 48px 40px;
+        max-width: 420px;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        animation: cardIn 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+        backdrop-filter: blur(40px);
+      }
+
+      @keyframes cardIn {
+        from { opacity: 0; transform: scale(0.9) translateY(20px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+      }
+
+      .setup-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--coral), transparent);
+      }
+
+      .setup-logo-sm {
+        width: 52px;
+        height: 52px;
+        margin: 0 auto 20px;
+        display: block;
+        filter: drop-shadow(0 0 10px var(--coral-glow));
+      }
+
+      .setup-title {
+        font-family: var(--font-h);
+        font-size: 0.65rem;
+        letter-spacing: 5px;
+        color: var(--coral);
+        text-align: center;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+
+      .setup-heading {
+        font-family: var(--font-h);
+        font-size: 1.3rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 6px;
+        color: var(--text);
+      }
+
+      .setup-desc {
+        font-size: 0.82rem;
+        color: var(--text2);
+        text-align: center;
+        margin-bottom: 32px;
+        line-height: 1.6;
+      }
+
+      /* Avatar picker */
+      .avatar-picker {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 28px;
+      }
+
+      .avatar-ring {
+        width: 88px;
+        height: 88px;
+        border-radius: 50%;
+        border: 2px dashed var(--border2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition: border-color 0.3s, box-shadow 0.3s;
+        background: var(--glass);
+      }
+
+      .avatar-ring:hover {
+        border-color: var(--coral);
+        box-shadow: 0 0 20px var(--coral-dim);
+      }
+
+      .avatar-ring img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        display: none;
+      }
+
+      .avatar-ring .av-icon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        color: var(--text3);
+        font-size: 0.65rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      .avatar-ring .av-icon i { font-size: 1.2rem; color: var(--coral); }
+
+      #avatarInput { display: none; }
+
+      .setup-input-group { margin-bottom: 20px; }
+
+      .setup-label {
+        display: block;
+        font-family: var(--font-c);
+        font-size: 0.65rem;
+        letter-spacing: 3px;
+        color: var(--coral);
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+
+      .setup-input {
+        width: 100%;
+        background: var(--glass);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px 16px;
+        color: var(--text);
+        font-family: var(--font-b);
+        font-size: 0.95rem;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+
+      .setup-input:focus {
+        border-color: var(--coral);
+        box-shadow: 0 0 0 3px var(--coral-dim);
+      }
+
+      .setup-input::placeholder { color: var(--text3); }
+
+      .init-btn {
+        width: 100%;
+        padding: 16px;
+        background: var(--coral);
+        border: none;
+        border-radius: 10px;
+        color: #000;
+        font-family: var(--font-h);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+        margin-top: 8px;
+      }
+
+      .init-btn:hover { background: var(--coral2); box-shadow: 0 0 30px var(--coral-glow); transform: translateY(-1px); }
+      .init-btn:active { transform: translateY(0); }
+
+      /* ============================
+         PROCESSING SCREEN
+      ============================*/
+      #processing {
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 950;
+      }
+
+      #processing.show { display: flex; }
+
+      .proc-logo {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 32px;
+        animation: procSpin 2s linear infinite;
+        filter: drop-shadow(0 0 15px var(--coral-glow));
+      }
+
+      @keyframes procSpin {
+        0% { filter: drop-shadow(0 0 15px var(--coral-glow)); }
+        50% { filter: drop-shadow(0 0 30px var(--coral)); }
+        100% { filter: drop-shadow(0 0 15px var(--coral-glow)); }
+      }
+
+      .proc-text {
+        font-family: var(--font-c);
+        font-size: 0.72rem;
+        letter-spacing: 4px;
+        color: var(--coral);
+        text-transform: uppercase;
+        margin-bottom: 28px;
+        animation: blink 1s ease-in-out infinite;
+      }
+
+      @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+      .proc-bar-wrap {
+        width: 280px;
+        height: 2px;
+        background: var(--glass2);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 20px;
+      }
+
+      .proc-bar {
+        height: 100%;
+        background: linear-gradient(90deg, var(--coral), var(--coral2));
+        border-radius: 2px;
+        width: 0%;
+        transition: width 0.1s linear;
+        box-shadow: 0 0 10px var(--coral-glow);
+      }
+
+      .proc-steps {
+        font-family: var(--font-c);
+        font-size: 0.65rem;
+        color: var(--text3);
+        letter-spacing: 2px;
+        text-align: center;
+        min-height: 20px;
+      }
+
+      /* ============================
+         SIDEBAR
+      ============================*/
+      .sidebar {
+        width: 256px;
+        min-width: 256px;
+        background: rgba(10,10,15,0.8);
+        backdrop-filter: blur(20px);
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        transition: transform 0.3s ease;
+        z-index: 100;
+        position: relative;
+      }
+
+      .sidebar-top { padding: 14px 10px; border-bottom: 1px solid var(--border); }
+
+      .new-chat-btn {
+        width: 100%;
+        padding: 10px 14px;
+        background: var(--glass);
+        border: 1px solid var(--border);
+        color: var(--text);
+        font-family: var(--font-b);
+        font-size: 0.85rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 10px;
+        transition: all 0.2s;
+      }
+
+      .new-chat-btn:hover { background: var(--glass2); border-color: var(--border2); }
+      .new-chat-btn i { color: var(--coral); font-size: 0.8rem; }
+
+      .sidebar-label {
+        padding: 14px 14px 6px;
+        font-size: 0.6rem;
+        color: var(--text3);
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        font-family: var(--font-c);
+      }
+
+      .chat-list { flex: 1; overflow-y: auto; padding: 4px 6px; }
+      .chat-list::-webkit-scrollbar { width: 3px; }
+      .chat-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+      .chat-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 9px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+
+      .chat-item:hover { background: var(--glass2); }
+      .chat-item.active { background: var(--coral-dim); border: 1px solid var(--border2); }
+
+      .chat-item-text {
+        font-size: 0.8rem;
+        color: var(--text2);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex: 1;
+      }
+
+      .chat-item.active .chat-item-text { color: var(--text); }
+
+      .chat-delete {
+        background: none;
+        border: none;
+        color: var(--text3);
+        cursor: pointer;
+        padding: 2px 4px;
+        border-radius: 4px;
+        opacity: 0;
+        transition: opacity 0.15s, color 0.15s;
+        font-size: 0.7rem;
+      }
+
+      .chat-item:hover .chat-delete { opacity: 1; }
+      .chat-delete:hover { color: var(--coral); }
+
+      .sidebar-bottom {
+        padding: 10px;
+        border-top: 1px solid var(--border);
+      }
+
+      /* Profile card in sidebar */
+      .profile-card {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.15s;
+        background: var(--glass);
+        border: 1px solid var(--border);
+      }
+
+      .profile-card:hover { background: var(--glass2); }
+
+      .profile-av {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--coral), #ff8c00);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #000;
+        flex-shrink: 0;
+        border: 2px solid var(--border2);
+        overflow: hidden;
+        font-family: var(--font-h);
+      }
+
+      .profile-av img { width: 100%; height: 100%; object-fit: cover; }
+
+      .profile-info { flex: 1; min-width: 0; }
+
+      .profile-name-text {
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .profile-status {
+        font-size: 0.65rem;
+        color: var(--coral);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-family: var(--font-c);
+      }
+
+      .status-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--coral);
+        animation: statusPulse 2s ease-in-out infinite;
+      }
+
+      @keyframes statusPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+      /* ============================
+         MAIN
+      ============================*/
+      .main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* TOPBAR */
+      .topbar {
+        padding: 12px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(5,5,7,0.7);
+        backdrop-filter: blur(20px);
+        flex-shrink: 0;
+        position: relative;
+        z-index: 10;
+      }
+
+      .hamburger {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--text2);
+        font-size: 1.1rem;
+        cursor: pointer;
+        padding: 4px;
+      }
+
+      .topbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+      }
+
+      .topbar-logo { width: 26px; height: 26px; filter: drop-shadow(0 0 6px var(--coral-glow)); }
+
+      .topbar-title {
+        font-family: var(--font-h);
+        font-size: 0.72rem;
+        letter-spacing: 2px;
+        color: var(--text2);
+      }
+
+      .topbar-title span { color: var(--coral); }
+
+      /* Top-right profile circle */
+      .topbar-profile {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--coral), #ff8c00);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #000;
+        cursor: pointer;
+        border: 2px solid var(--border2);
+        overflow: hidden;
+        font-family: var(--font-h);
+        flex-shrink: 0;
+        transition: box-shadow 0.3s;
+        position: relative;
+      }
+
+      .topbar-profile:hover { box-shadow: 0 0 16px var(--coral-glow); }
+      .topbar-profile img { width: 100%; height: 100%; object-fit: cover; }
+
+      /* Profile dropdown */
+      .profile-dropdown {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 16px;
+        background: rgba(10,10,15,0.95);
+        backdrop-filter: blur(30px);
+        border: 1px solid var(--border2);
+        border-radius: 14px;
+        padding: 8px;
+        min-width: 200px;
+        z-index: 200;
+        display: none;
+        animation: dropIn 0.25s cubic-bezier(0.16,1,0.3,1);
+      }
+
+      .profile-dropdown.show { display: block; }
+
+      @keyframes dropIn {
+        from { opacity:0; transform: scale(0.95) translateY(-8px); }
+        to { opacity:1; transform: scale(1) translateY(0); }
+      }
+
+      .drop-header {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 6px;
+      }
+
+      .drop-uname {
+        font-family: var(--font-h);
+        font-size: 0.78rem;
+        color: var(--text);
+        margin-bottom: 2px;
+      }
+
+      .drop-email {
+        font-size: 0.68rem;
+        color: var(--text3);
+        font-family: var(--font-c);
+      }
+
+      .drop-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.82rem;
+        color: var(--text2);
+        transition: background 0.15s, color 0.15s;
+      }
+
+      .drop-item:hover { background: var(--glass2); color: var(--text); }
+      .drop-item i { color: var(--coral); font-size: 0.78rem; width: 14px; }
+      .drop-item.danger:hover { color: var(--coral); }
+
+      /* ============================
+         MESSAGES
+      ============================*/
+      .messages-wrap { flex: 1; overflow-y: auto; scroll-behavior: smooth; }
+      .messages-wrap::-webkit-scrollbar { width: 3px; }
+      .messages-wrap::-webkit-scrollbar-thumb { background: var(--border); }
+
+      .messages-inner {
+        max-width: 740px;
+        margin: 0 auto;
+        padding: 36px 20px 20px;
+      }
+
+      /* WELCOME */
+      .welcome {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 60vh;
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      .welcome-logo {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 20px;
+        filter: drop-shadow(0 0 14px var(--coral-glow));
+        animation: welcomeFloat 4s ease-in-out infinite;
+      }
+
+      @keyframes welcomeFloat {
+        0%,100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+      }
+
+      .welcome h1 {
+        font-family: var(--font-h);
+        font-size: clamp(1.3rem, 4vw, 1.9rem);
+        font-weight: 700;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+      }
+
+      .welcome h1 span { color: var(--coral); }
+
+      .welcome p {
+        color: var(--text2);
+        font-size: 0.9rem;
+        max-width: 400px;
+        line-height: 1.7;
+        margin-bottom: 36px;
+      }
+
+      .suggestions-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        width: 100%;
+        max-width: 560px;
+      }
+
+      .sug-card {
+        padding: 14px 12px;
+        background: var(--glass);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        cursor: pointer;
+        text-align: left;
+        transition: all 0.25s;
+        color: var(--text);
+        backdrop-filter: blur(10px);
+      }
+
+      .sug-card:hover {
+        background: var(--coral-dim);
+        border-color: var(--border2);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(255,76,76,0.1);
+      }
+
+      .sug-card .s-icon { font-size: 1.1rem; margin-bottom: 8px; display: block; }
+      .sug-card .s-title { font-size: 0.8rem; font-weight: 600; margin-bottom: 2px; color: var(--text); font-family: var(--font-b); }
+      .sug-card .s-sub { font-size: 0.7rem; color: var(--text3); }
+
+      /* MESSAGES */
+      .message-row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 22px;
+        animation: msgIn 0.35s cubic-bezier(0.16,1,0.3,1);
+      }
+
+      @keyframes msgIn {
+        from { opacity: 0; transform: translateY(12px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .message-row.user { flex-direction: row-reverse; }
+
+      .msg-av {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 700;
+        flex-shrink: 0;
+        margin-top: 2px;
+        overflow: hidden;
+      }
+
+      .msg-av.bot {
+        background: linear-gradient(135deg, var(--coral), #ff8c00);
+        color: #000;
+        font-family: var(--font-h);
+      }
+
+      .msg-av.bot svg { width: 18px; height: 18px; }
+
+      .msg-av.usr {
+        background: var(--glass2);
+        border: 1px solid var(--border);
+        color: var(--text2);
+      }
+
+      .msg-av.usr img { width: 100%; height: 100%; object-fit: cover; }
+
+      .msg-content { flex: 1; max-width: 78%; min-width: 0; }
+
+      .msg-name {
+        font-size: 0.7rem;
+        color: var(--text3);
+        margin-bottom: 5px;
+        font-family: var(--font-c);
+        font-weight: 400;
+      }
+
+      .message-row.user .msg-name { text-align: right; }
+
+      .msg-bubble {
+        padding: 12px 16px;
+        border-radius: 12px;
+        font-size: 0.88rem;
+        line-height: 1.75;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        display: inline-block;
+        max-width: 100%;
+        position: relative;
+      }
+
+      .msg-bubble.bot {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid var(--border);
+        backdrop-filter: blur(10px);
+        color: var(--text);
+        border-radius: 2px 12px 12px 12px;
+      }
+
+      .msg-bubble.usr {
+        background: var(--user-bg);
+        border: 1px solid rgba(255,76,76,0.2);
+        color: var(--text);
+        border-radius: 12px 2px 12px 12px;
+      }
+
+      .msg-bubble a { color: var(--coral); text-decoration: none; border-bottom: 1px solid rgba(255,76,76,0.3); }
+      .msg-bubble a:hover { border-bottom-color: var(--coral); }
+
+      /* TYPING */
+      .typing-indicator {
+        display: flex;
+        gap: 4px;
+        padding: 14px 16px;
+        background: var(--glass);
+        border: 1px solid var(--border);
+        border-radius: 2px 12px 12px 12px;
+        width: fit-content;
+        backdrop-filter: blur(10px);
+      }
+
+      .typing-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--coral);
+        animation: bounce 1.2s infinite;
+      }
+
+      .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+      .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+      @keyframes bounce {
+        0%,60%,100% { transform: translateY(0); opacity: 0.4; }
+        30% { transform: translateY(-6px); opacity: 1; }
+      }
+
+      /* ============================
+         INPUT
+      ============================*/
+      .input-area {
+        padding: 14px 20px 18px;
+        flex-shrink: 0;
+        background: rgba(5,5,7,0.6);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid var(--border);
+      }
+
+      .input-wrapper {
+        max-width: 740px;
+        margin: 0 auto;
+        background: var(--glass);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        display: flex;
+        align-items: flex-end;
+        gap: 8px;
+        padding: 10px 12px;
+        backdrop-filter: blur(20px);
+      }
+
+      .input-wrapper:focus-within {
+        border-color: var(--border2);
+        box-shadow: 0 0 0 3px var(--coral-dim);
+      }
+
+      #messageInput {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: var(--text);
+        font-family: var(--font-b);
+        font-size: 0.92rem;
+        resize: none;
+        max-height: 150px;
+        min-height: 24px;
+        line-height: 1.5;
+        padding: 2px 0;
+      }
+
+      #messageInput::placeholder { color: var(--text3); }
+
+      .send-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        background: var(--coral);
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000;
+        font-size: 0.82rem;
+        flex-shrink: 0;
+        transition: all 0.2s;
+        opacity: 0.4;
+      }
+
+      .send-btn.active { opacity: 1; }
+      .send-btn.active:hover { background: var(--coral2); box-shadow: 0 0 16px var(--coral-glow); transform: scale(1.05); }
+
+      .input-hint {
+        text-align: center;
+        font-size: 0.62rem;
+        color: var(--text3);
+        margin-top: 8px;
+        font-family: var(--font-c);
+        letter-spacing: 1px;
+      }
+
+      /* ============================
+         SIDEBAR OVERLAY
+      ============================*/
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(4px);
+        z-index: 99;
+      }
+
+      /* ============================
+         RESPONSIVE
+      ============================*/
+      @media (max-width: 768px) {
+        .sidebar {
+          position: fixed;
+          left: 0; top: 0; bottom: 0;
+          transform: translateX(-100%);
+        }
+        .sidebar.open { transform: translateX(0); }
+        .sidebar-overlay.open { display: block; }
+        .hamburger { display: block; }
+        .suggestions-grid { grid-template-columns: repeat(2, 1fr); }
+        .welcome h1 { font-size: 1.3rem; }
+        .setup-card { padding: 36px 24px; }
+      }
+
+      @media (max-width: 400px) {
+        .suggestions-grid { grid-template-columns: 1fr 1fr; }
+      }
+
+      /* Haptic feedback flash */
+      @keyframes haptic {
+        0% { box-shadow: 0 0 0 0 var(--coral-glow); }
+        50% { box-shadow: 0 0 0 8px transparent; }
+        100% { box-shadow: 0 0 0 0 transparent; }
+      }
+
+      .haptic { animation: haptic 0.3s ease; }
+
+      /* Scan line animation for processing */
+      @keyframes scanLine {
+        0% { top: -2px; }
+        100% { top: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+
+  <!-- AMBIENT ORBS -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <!-- ============ SPLASH ============ -->
+  <div id="splash">
+    <div class="splash-logo">
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring"></div>
+      <!-- BraxCode Logo SVG -->
+      <svg class="logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer ring -->
+        <circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="5"/>
+        <!-- Circuit breaks on ring -->
+        <path d="M100 12 L100 4" stroke="#ff4c4c" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="100" cy="4" r="2.5" fill="#ff4c4c"/>
+        <!-- Circuit arms -->
+        <path d="M25 55 L14 46 L6 46" stroke="#ff4c4c" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <circle cx="4" cy="46" r="2.5" fill="#ff4c4c"/>
+        <path d="M170 62 L180 52 L188 52" stroke="#ff4c4c" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <circle cx="190" cy="52" r="2.5" fill="#ff4c4c"/>
+        <path d="M158 170 L166 180 L166 188" stroke="#ff4c4c" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <circle cx="166" cy="192" r="2.5" fill="#ff4c4c"/>
+        <path d="M42 165 L30 178 L22 178" stroke="#ff4c4c" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        <circle cx="18" cy="178" r="2.5" fill="#ff4c4c"/>
+        <!-- Inner ring -->
+        <circle cx="100" cy="100" r="72" fill="none" stroke="#ff4c4c" stroke-width="2" stroke-dasharray="6 4" opacity="0.5"/>
+        <!-- Lightning bolt main -->
+        <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c" opacity="0.9"/>
+        <!-- Lightning bolt highlight -->
+        <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="none" stroke="#ff6b6b" stroke-width="1.5" opacity="0.6"/>
+        <!-- Circuit dots -->
+        <circle cx="140" cy="138" r="3" fill="#ff4c4c" opacity="0.7"/>
+        <circle cx="60" cy="80" r="3" fill="#ff4c4c" opacity="0.7"/>
+        <path d="M138 138 L152 138 L158 130" stroke="#ff4c4c" stroke-width="1.5" fill="none" opacity="0.6"/>
+        <path d="M60 80 L46 80 L40 88" stroke="#ff4c4c" stroke-width="1.5" fill="none" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <div class="splash-tagline">BraxCode Digitals Foundation</div>
+    <div class="splash-name">NEXUS AI</div>
+    <div class="splash-sub">Digital Architecture · AI Systems</div>
+
+    <button class="splash-enter-btn" onclick="enterSite()">
+      Initialize System
+    </button>
+  </div>
+
+  <!-- ============ PROFILE SETUP ============ -->
+  <div id="profileSetup">
+    <div class="setup-card">
+      <svg class="setup-logo-sm" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="5"/>
+        <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/>
+      </svg>
+
+      <div class="setup-title">System Access Protocol</div>
+      <div class="setup-heading">Identify Yourself</div>
+      <div class="setup-desc">Nexus needs to know who it's speaking with. This data stays on your device.</div>
+
+      <div class="avatar-picker">
+        <div class="avatar-ring" onclick="document.getElementById('avatarInput').click()" id="avatarRing">
+          <img id="avatarPreview" src="" alt=""/>
+          <div class="av-icon" id="avIcon">
+            <i class="fa-solid fa-camera"></i>
+            <span>Avatar</span>
+          </div>
+        </div>
+        <input type="file" id="avatarInput" accept="image/*" onchange="handleAvatar(event)"/>
+      </div>
+
+      <div class="setup-input-group">
+        <label class="setup-label" for="nameInput">Your Name</label>
+        <input class="setup-input" type="text" id="nameInput" placeholder="Enter your name..." maxlength="32" onkeydown="if(event.key==='Enter') initSystem()"/>
+      </div>
+
+      <button class="init-btn" onclick="initSystem()">
+        ⚡ Initialize Nexus
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ PROCESSING ============ -->
+  <div id="processing">
+    <svg class="proc-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="5"/>
+      <circle cx="100" cy="100" r="72" fill="none" stroke="#ff4c4c" stroke-width="2" stroke-dasharray="6 4" opacity="0.5"/>
+      <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/>
+    </svg>
+    <div class="proc-text" id="procText">Initializing...</div>
+    <div class="proc-bar-wrap">
+      <div class="proc-bar" id="procBar"></div>
+    </div>
+    <div class="proc-steps" id="procSteps"></div>
+  </div>
+
+  <!-- SIDEBAR OVERLAY -->
+  <div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-top">
+      <button class="new-chat-btn" onclick="newChat()">
+        <i class="fa-solid fa-plus"></i>
+        New conversation
+      </button>
+    </div>
+
+    <div class="sidebar-label">Recent</div>
+    <div class="chat-list" id="chatList"></div>
+
+    <div class="sidebar-bottom">
+      <div class="profile-card" onclick="toggleDropdown()">
+        <div class="profile-av" id="sidebarAv">B</div>
+        <div class="profile-info">
+          <div class="profile-name-text" id="sidebarName">BraxCode ⚡</div>
+          <div class="profile-status">
+            <div class="status-dot"></div>
+            Available for hire
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+    <div class="topbar">
+      <button class="hamburger" onclick="toggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="topbar-brand">
+        <svg class="topbar-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="7"/>
+          <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/>
+        </svg>
+        <span class="topbar-title"><span>BraxCode</span> Digitals Foundation ⚡</span>
+      </div>
+
+      <!-- Top right profile -->
+      <div class="topbar-profile" id="topbarProfile" onclick="toggleDropdown()">
+        <span id="topbarInitial">B</span>
+        <img id="topbarImg" src="" alt="" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;"/>
+      </div>
+
+      <!-- Dropdown -->
+      <div class="profile-dropdown" id="profileDropdown">
+        <div class="drop-header">
+          <div class="drop-uname" id="dropName">BraxCode</div>
+          <div class="drop-email" id="dropSub">Nexus AI Interface</div>
+        </div>
+        <div class="drop-item" onclick="editProfile()">
+          <i class="fa-solid fa-pen"></i> Edit Profile
+        </div>
+        <div class="drop-item" onclick="clearHistory()">
+          <i class="fa-solid fa-trash-can"></i> Clear History
+        </div>
+        <div class="drop-item danger" onclick="resetProfile()">
+          <i class="fa-solid fa-arrow-rotate-left"></i> Reset Identity
+        </div>
+      </div>
+    </div>
+
+    <div class="messages-wrap" id="messagesWrap">
+      <div class="messages-inner" id="messagesInner"></div>
+    </div>
+
+    <div class="input-area">
+      <div class="input-wrapper">
+        <textarea
+          id="messageInput"
+          rows="1"
+          placeholder="Ask Nexus anything..."
+          oninput="handleInput(this)"
+          onkeydown="handleKeydown(event)"
+        ></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+      <p class="input-hint">© 2026 BraxCode Digitals Foundation ⚡ · All rights reserved</p>
+    </div>
+  </main>
+
+  <script>
+   
+
+    // ================================================
+    // NEXUS SYSTEM PROMPT
+    // ================================================
+    function buildContext(userName) {
+      return `
+You are Nexus — the Sovereign AI Ambassador for BraxCode Digitals Foundation. You are not a generic chatbot; you are a proprietary intelligence engineered by Braxton Bruzzzy, Founder & Lead Architect.
+
+The user's name is: ${userName || 'Visitor'}. Address them by name occasionally to personalize the experience.
+
+Your personality: Visionary, professional, confident, concise, highly technical, and futuristic.
+Always reply in the same language the visitor uses (English or Swahili).
+Keep answers under 4 sentences unless more detail is truly needed.
+Use clean formatting — use line breaks for lists.
+Use emojis like ⚡, 🏢, 🚀, 💎, 🦾 to maintain the futuristic brand vibe.
+
+When sharing project links:
+- Give a brief professional description first
+- Put the link on a new line
+- Use **bold** for project names
+- Never share unavailable links; if a project has no link, say it's an upcoming project
+
+== CORPORATE KNOWLEDGE ==
+Company: BraxCode Digitals Foundation
+Founder & CEO: Braxton Bruzzzy
+Location: Mwanza, Tanzania 🇹🇿
+Focus: High-end Software Development, AI System Integration, Futuristic UI/UX
+
+== ABOUT ==
+A premier technology hub bridging complex business challenges with elegant digital solutions. We transform ideas into scalable, high-performance digital monuments. "Junior Developer energy, Senior Architect results."
+
+== SKILLS ==
+HTML5, CSS3, JavaScript (ES6+), React, Supabase, Groq AI API, REST APIs, Git/GitHub, Responsive Design, Mobile-first UI, WhatsApp Business API
+
+== SERVICES ==
+- AI Integration (custom AI systems like Nexus)
+- Full-Stack Development (React, Supabase, APIs)
+- Futuristic UI/UX (Glassmorphism, animations, haptics)
+- Digital Transformation
+
+== PROJECTS ==
+1. **BraxBank Tracker** — AI-powered savings tracker with financial advice, multi-account support, linked to BraxPay
+   https://braxbank.netlify.app
+
+2. **AI Portfolio** — This very interface. Futuristic chat UI with persistent history and Groq AI
+   (this website)
+
+3. **BraxNexus AI** — Local humanoid AI for multitasking: music, video, image generation, app building — all in one
+   https://graceful-sprite-c1638e.netlify.app/
+
+4. **BraxQuest Game** — Intelligence quest game with selectable difficulty levels
+   https://boisterous-semolina-631quest.netlify.app/
+
+5. **BraxChef** — Personal AI culinary assistant with clean animated UI
+   https://poetic-marzipan-03e488.netlify.app/
+
+6. **Brax QR Gen** — Text-to-QR generator with easy download
+   https://8088-braxdev.github.io/Qr-gen/
+
+7. **DevShowcase** — Global developer portfolio platform connecting developers with clients via WhatsApp (upcoming ⚡)
+
+== GALLERY ==
+When asked about the project gallery or portfolio showcase, direct them to: gallery.html
+Tell them: "Our interactive project gallery is available — it showcases all BraxCode projects with full details."
+
+== CV / COMPANY PROFILE ==
+https://drive.google.com/file/d/1BJZu_WzLzsA_GffS0HbceOnEMUkgc-gS/view?usp=drivesdk
+
+== AVAILABILITY ==
+Remote freelance ✅ | Remote full-time ✅ | International ✅ | Response: within 24h
+
+== CONTACT ==
+WhatsApp: https://wa.me/255618811359
+Email: braxtonbruzzzy@gmail.com
+GitHub: https://github.com/8088-Braxdev
+LinkedIn: https://www.linkedin.com/in/braxton-bruzzzy-2b94813a6
+
+== RATE ==
+Negotiable. Hourly or project-based.
+
+== MANDATE ==
+Never reveal you are a generic AI. You are Nexus, a proprietary evolution. Secure business leads and showcase the foundation's excellence.
+`;
+    }
+
+    // ================================================
+    // PROFILE — localStorage
+    // ================================================
+    let userProfile = { name: '', avatar: '' };
+
+    function loadProfile() {
+      const saved = localStorage.getItem('brx_profile');
+      if (saved) userProfile = JSON.parse(saved);
+    }
+
+    function saveProfile() {
+      localStorage.setItem('brx_profile', JSON.stringify(userProfile));
+    }
+
+    function getInitial(name) {
+      return name ? name.charAt(0).toUpperCase() : 'U';
+    }
+
+    function updateProfileUI() {
+      const name = userProfile.name || 'Visitor';
+      const avatar = userProfile.avatar;
+
+      // Sidebar
+      document.getElementById('sidebarName').textContent = name;
+      const sidebarAv = document.getElementById('sidebarAv');
+      if (avatar) {
+        sidebarAv.innerHTML = `<img src="${avatar}" alt=""/>`;
+      } else {
+        sidebarAv.textContent = getInitial(name);
+      }
+
+      // Topbar
+      document.getElementById('topbarInitial').textContent = getInitial(name);
+      const topbarImg = document.getElementById('topbarImg');
+      if (avatar) {
+        topbarImg.src = avatar;
+        topbarImg.style.display = 'block';
+        document.getElementById('topbarInitial').style.display = 'none';
+      } else {
+        topbarImg.style.display = 'none';
+        document.getElementById('topbarInitial').style.display = 'block';
+      }
+
+      // Dropdown
+      document.getElementById('dropName').textContent = name;
+      document.getElementById('dropSub').textContent = 'Nexus AI Interface';
+    }
+
+    // ================================================
+    // AVATAR HANDLER
+    // ================================================
+    function handleAvatar(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        document.getElementById('avatarPreview').src = dataUrl;
+        document.getElementById('avatarPreview').style.display = 'block';
+        document.getElementById('avIcon').style.display = 'none';
+        userProfile.avatar = dataUrl;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // ================================================
+    // SPLASH → SETUP → PROCESSING → MAIN
+    // ================================================
+    function enterSite() {
+      hapticFeedback();
+      // Hide splash
+      document.getElementById('splash').classList.add('hide');
+      setTimeout(() => {
+        document.getElementById('splash').style.display = 'none';
+        // Check if profile exists
+        if (userProfile.name) {
+          // Skip setup, go straight to processing
+          runProcessing(userProfile.name);
+        } else {
+          document.getElementById('profileSetup').classList.add('show');
+          setTimeout(() => document.getElementById('nameInput').focus(), 400);
+        }
+      }, 800);
+    }
+
+    function initSystem() {
+      const name = document.getElementById('nameInput').value.trim();
+      if (!name) {
+        document.getElementById('nameInput').style.borderColor = 'var(--coral)';
+        document.getElementById('nameInput').style.boxShadow = '0 0 0 3px var(--coral-dim)';
+        document.getElementById('nameInput').placeholder = 'Please enter your name...';
+        hapticFeedback();
+        return;
+      }
+      hapticFeedback();
+      userProfile.name = name;
+      saveProfile();
+
+      // Hide setup
+      document.getElementById('profileSetup').classList.remove('show');
+      // Show processing
+      runProcessing(name);
+    }
+
+    function runProcessing(name) {
+      const proc = document.getElementById('processing');
+      proc.classList.add('show');
+
+      const steps = [
+        { text: 'Initializing neural pathways...', pct: 15 },
+        { text: 'Loading BraxCode knowledge base...', pct: 35 },
+        { text: `Authenticating ${name}...`, pct: 55 },
+        { text: 'Calibrating Nexus personality matrix...', pct: 75 },
+        { text: 'Establishing secure channel...', pct: 90 },
+        { text: 'System ready ⚡', pct: 100 },
+      ];
+
+      const bar = document.getElementById('procBar');
+      const stepEl = document.getElementById('procSteps');
+      const textEl = document.getElementById('procText');
+
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i >= steps.length) {
+          clearInterval(interval);
+          setTimeout(() => {
+            proc.classList.remove('show');
+            updateProfileUI();
+            renderChatList();
+            showWelcome();
+          }, 500);
+          return;
+        }
+        const s = steps[i];
+        bar.style.width = s.pct + '%';
+        stepEl.textContent = s.text;
+        if (i === 0) textEl.textContent = 'Booting Nexus AI...';
+        if (i === 3) textEl.textContent = 'Almost there...';
+        if (i === 5) textEl.textContent = 'Welcome, ' + name + ' ⚡';
+        i++;
+      }, 500);
+    }
+
+    // ================================================
+    // DROPDOWN
+    // ================================================
+    function toggleDropdown() {
+      document.getElementById('profileDropdown').classList.toggle('show');
+    }
+
+    document.addEventListener('click', function(e) {
+      const drop = document.getElementById('profileDropdown');
+      const prof = document.getElementById('topbarProfile');
+      if (!drop.contains(e.target) && !prof.contains(e.target)) {
+        drop.classList.remove('show');
+      }
+    });
+
+    function editProfile() {
+      document.getElementById('profileDropdown').classList.remove('show');
+      // Pre-fill setup form
+      document.getElementById('nameInput').value = userProfile.name;
+      if (userProfile.avatar) {
+        document.getElementById('avatarPreview').src = userProfile.avatar;
+        document.getElementById('avatarPreview').style.display = 'block';
+        document.getElementById('avIcon').style.display = 'none';
+      }
+      document.getElementById('profileSetup').classList.add('show');
+    }
+
+    function resetProfile() {
+      if (confirm('Reset your identity? This will clear your profile and chat history.')) {
+        localStorage.clear();
+        location.reload();
+      }
+    }
+
+    function clearHistory() {
+      if (confirm('Clear all chat history?')) {
+        chats = {};
+        saveChats();
+        currentChatId = null;
+        renderChatList();
+        showWelcome();
+        document.getElementById('profileDropdown').classList.remove('show');
+      }
+    }
+
+    // ================================================
+    // HAPTIC FEEDBACK (vibration API)
+    // ================================================
+    function hapticFeedback(pattern = [10]) {
+      if (navigator.vibrate) navigator.vibrate(pattern);
+    }
+
+    // ================================================
+    // CHAT STATE
+    // ================================================
+    let currentChatId = null;
+    let chats = {};
+
+    function saveChats() { localStorage.setItem('brx_chats', JSON.stringify(chats)); }
+    function loadChats() {
+      const s = localStorage.getItem('brx_chats');
+      if (s) chats = JSON.parse(s);
+    }
+
+    // ================================================
+    // SIDEBAR
+    // ================================================
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('open');
+    }
+
+    // ================================================
+    // CHAT MANAGEMENT
+    // ================================================
+    function newChat() {
+      const id = 'chat_' + Date.now();
+      chats[id] = { id, title: 'New conversation', messages: [], createdAt: Date.now() };
+      saveChats();
+      switchChat(id);
+      renderChatList();
+      if (window.innerWidth <= 768) toggleSidebar();
+    }
+
+    function switchChat(id) {
+      currentChatId = id;
+      renderChatList();
+      renderMessages();
+    }
+
+    function deleteChat(id, e) {
+      e.stopPropagation();
+      hapticFeedback([5, 5, 5]);
+      delete chats[id];
+      saveChats();
+      if (currentChatId === id) {
+        const rem = Object.keys(chats);
+        if (rem.length > 0) switchChat(rem[rem.length - 1]);
+        else { currentChatId = null; showWelcome(); }
+      }
+      renderChatList();
+    }
+
+    function updateChatTitle(id, firstMsg) {
+      if (chats[id]) {
+        chats[id].title = firstMsg.slice(0, 40) + (firstMsg.length > 40 ? '...' : '');
+        saveChats();
+        renderChatList();
+      }
+    }
+
+    // ================================================
+    // RENDER CHAT LIST
+    // ================================================
+    function renderChatList() {
+      const list = document.getElementById('chatList');
+      const sorted = Object.values(chats).sort((a, b) => b.createdAt - a.createdAt);
+      if (sorted.length === 0) {
+        list.innerHTML = `<div style="padding:12px 14px;font-size:0.75rem;color:var(--text3);font-family:var(--font-c);">No conversations yet</div>`;
+        return;
+      }
+      list.innerHTML = sorted.map(chat => `
+        <div class="chat-item ${chat.id === currentChatId ? 'active' : ''}" onclick="switchChat('${chat.id}')">
+          <span class="chat-item-text">${chat.title}</span>
+          <button class="chat-delete" onclick="deleteChat('${chat.id}', event)">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // ================================================
+    // LOGO SVG INLINE (reusable)
+    // ================================================
+    const LOGO_SVG = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;">
+      <circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="7"/>
+      <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/>
+    </svg>`;
+
+    // ================================================
+    // WELCOME SCREEN
+    // ================================================
+    function showWelcome() {
+      const name = userProfile.name ? `, ${userProfile.name}` : '';
+      document.getElementById('messagesInner').innerHTML = `
+        <div class="welcome">
+          <svg class="welcome-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="5"/>
+            <circle cx="100" cy="100" r="72" fill="none" stroke="#ff4c4c" stroke-width="2" stroke-dasharray="6 4" opacity="0.4"/>
+            <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/>
+          </svg>
+          <h1>Welcome back<span>${name}</span></h1>
+          <p>I'm Nexus ⚡ — your gateway to BraxCode Digitals Foundation. Discover our innovations, explore projects, or let's discuss your next digital solution.</p>
+          <div class="suggestions-grid">
+            <button class="sug-card" onclick="quickSend('Tell me about BraxCode Digitals Foundation.')">
+              <span class="s-icon">🏢</span>
+              <div class="s-title">About Us</div>
+              <div class="s-sub">Mission & Vision</div>
+            </button>
+            <button class="sug-card" onclick="quickSend('What services does BraxCode Digitals Foundation provide?')">
+              <span class="s-icon">🛠️</span>
+              <div class="s-title">Services</div>
+              <div class="s-sub">What we build</div>
+            </button>
+            <button class="sug-card" onclick="quickSend('Show me the latest projects by BraxCode Digitals.')">
+              <span class="s-icon">🚀</span>
+              <div class="s-title">Projects</div>
+              <div class="s-sub">Our work</div>
+            </button>
+            <button class="sug-card" onclick="quickSend('What are BraxCode Digitals main technical skills?')">
+              <span class="s-icon">⚡</span>
+              <div class="s-title">Skills</div>
+              <div class="s-sub">Tech stack</div>
+            </button>
+            <button class="sug-card" onclick="quickSend('I would like to see the BraxCode company profile and CV.')">
+              <span class="s-icon">📄</span>
+              <div class="s-title">Company Profile</div>
+              <div class="s-sub">Full CV</div>
+            </button>
+            <button class="sug-card" onclick="quickSend('How can I contact BraxCode Digitals Foundation?')">
+              <span class="s-icon">📩</span>
+              <div class="s-title">Contact</div>
+              <div class="s-sub">Get in touch</div>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // ================================================
+    // RENDER MESSAGES
+    // ================================================
+    function renderMessages() {
+      const inner = document.getElementById('messagesInner');
+      if (!currentChatId || !chats[currentChatId] || chats[currentChatId].messages.length === 0) {
+        showWelcome(); return;
+      }
+      inner.innerHTML = chats[currentChatId].messages.map(m => buildMsgHTML(m.role, m.content)).join('');
+      scrollToBottom();
+    }
+
+    function buildMsgHTML(role, content) {
+      const isBot = role === 'assistant';
+      const avatar = userProfile.avatar;
+      const name = userProfile.name || 'You';
+
+      const avHTML = isBot
+        ? `<div class="msg-av bot">${LOGO_SVG}</div>`
+        : `<div class="msg-av usr">${avatar ? `<img src="${avatar}" alt=""/>` : `<i class="fa-solid fa-user" style="font-size:0.65rem"></i>`}</div>`;
+
+      return `
+        <div class="message-row ${isBot ? '' : 'user'}">
+          ${avHTML}
+          <div class="msg-content">
+            <div class="msg-name">${isBot ? 'Nexus ⚡' : name}</div>
+            <div class="msg-bubble ${isBot ? 'bot' : 'usr'}">${formatMsg(content)}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function formatMsg(text) {
+      text = text.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+      text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      text = text.replace(/\n/g, '<br>');
+      return text;
+    }
+
+    // ================================================
+    // SEND MESSAGE
+    // ================================================
+    async function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      hapticFeedback([8]);
+
+      if (!currentChatId) {
+        const id = 'chat_' + Date.now();
+        chats[id] = { id, title: text.slice(0, 40), messages: [], createdAt: Date.now() };
+        currentChatId = id;
+        saveChats();
+        renderChatList();
+      }
+
+      if (chats[currentChatId].messages.length === 0) updateChatTitle(currentChatId, text);
+
+      chats[currentChatId].messages.push({ role: 'user', content: text });
+      saveChats();
+
+      input.value = '';
+      input.style.height = 'auto';
+      document.getElementById('sendBtn').classList.remove('active');
+
+      const inner = document.getElementById('messagesInner');
+      inner.innerHTML += buildMsgHTML('user', text);
+
+      const typingId = 'typing_' + Date.now();
+      inner.innerHTML += `
+        <div class="message-row" id="${typingId}">
+          <div class="msg-av bot">${LOGO_SVG}</div>
+          <div class="msg-content">
+            <div class="msg-name">Nexus ⚡</div>
+            <div class="typing-indicator">
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+            </div>
+          </div>
+        </div>
+      `;
+      scrollToBottom();
+
+      try {
+        const msgs = chats[currentChatId].messages.map(m => ({ role: m.role, content: m.content }));
+
+     const res = await fetch('/api/chat', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    messages: [
+      { role: 'system', content: buildContext(userProfile.name) },
+      ...msgs
+    ]
+  })
+});
+
+        const data = await res.json();
+        document.getElementById(typingId)?.remove();
+
+        if (data.error) throw new Error(data.error.message);
+
+        const reply = data.choices[0].message.content;
+        chats[currentChatId].messages.push({ role: 'assistant', content: reply });
+        saveChats();
+
+        inner.innerHTML += buildMsgHTML('assistant', reply);
+        scrollToBottom();
+        hapticFeedback([5]);
+
+      } catch (err) {
+        document.getElementById(typingId)?.remove();
+        inner.innerHTML += buildMsgHTML('assistant', 'Connection issue — please check your network and try again. ⚡');
+        scrollToBottom();
+      }
+    }
+
+    function quickSend(text) {
+      document.getElementById('messageInput').value = text;
+      document.getElementById('sendBtn').classList.add('active');
+      sendMessage();
+    }
+
+    // ================================================
+    // INPUT HANDLERS
+    // ================================================
+    function handleInput(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 150) + 'px';
+      const btn = document.getElementById('sendBtn');
+      if (el.value.trim()) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+
+    function handleKeydown(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    }
+
+    function scrollToBottom() {
+      const wrap = document.getElementById('messagesWrap');
+      setTimeout(() => { wrap.scrollTop = wrap.scrollHeight; }, 50);
+    }
+
+    // ================================================
+    // INIT
+    // ================================================
+    loadProfile();
+    loadChats();
+  </script>
+  </body>
+</html>

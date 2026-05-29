@@ -1447,7 +1447,6 @@ function newChat() {
     function formatMsg(text) {
         // Gallery trigger
   if (text.includes('[OPEN_GALLERY]')) {
-    setTimeout(() => openGallery(), 600);
     text = text.replace('[OPEN_GALLERY]', 
       `<span onclick="openGallery()" style="color:var(--coral);cursor:pointer;text-decoration:underline;text-underline-offset:3px;">
         ⚡ Open Gallery
@@ -1578,7 +1577,7 @@ function newChat() {
   const frame = document.getElementById('galleryFrame');
   panel.style.display = 'flex';
   if (!frame.src || frame.src === window.location.href) {
-    frame.src = 'gallery.html';
+    frame.src = 'https://braxcode.com';
   }
 }
 

@@ -1083,6 +1083,7 @@
 
   <script>
     // ================================================
+    const userProfile = { name: '', avatar: '' };
     // NEXUS SYSTEM PROMPT
     // ================================================
 function buildContext(userName) {
@@ -1170,24 +1171,7 @@ Fully negotiable — hourly or project-based. BraxCode believes in fair pricing 
 `;
     }
 
-      // Topbar
-      document.getElementById('topbarInitial').textContent = getInitial(name);
-      const topbarImg = document.getElementById('topbarImg');
-      if (avatar) {
-        topbarImg.src = avatar;
-        topbarImg.style.display = 'block';
-        document.getElementById('topbarInitial').style.display = 'none';
-      } else {
-        topbarImg.style.display = 'none';
-        document.getElementById('topbarInitial').style.display = 'block';
-      }
 
-      // Dropdown
-      document.getElementById('dropName').textContent = name;
-      document.getElementById('dropSub').textContent = 'Nexus AI Interface';
-    }
-
-    // ================================================
 
     // ================================================
     // SPLASH → SETUP → PROCESSING → MAIN
@@ -1561,7 +1545,7 @@ function newChat() {
     // ================================================
     // INIT
     // ================================================
-    loadProfile();
+  
     loadChats();
   </script>
   </body>

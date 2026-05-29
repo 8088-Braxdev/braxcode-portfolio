@@ -1080,7 +1080,24 @@
       <p class="input-hint">© 2026 BraxCode Digitals Foundation ⚡ · All rights reserved</p>
     </div>
   </main>
-
+<!-- GALLERY PANEL -->
+<div id="galleryPanel" style="
+  position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,0.92);
+  backdrop-filter:blur(12px);
+  display:none;flex-direction:column;
+">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--bg2);">
+    <span style="font-family:var(--font-h);font-size:0.75rem;letter-spacing:3px;color:var(--coral);">PROJECT GALLERY</span>
+    <button onclick="closeGallery()" style="background:none;border:1px solid var(--border);color:var(--text2);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:var(--font-b);font-size:0.8rem;">✕ Close</button>
+  </div>
+  <iframe 
+    id="galleryFrame"
+    src=""
+    style="flex:1;border:none;width:100%;height:100%;"
+    loading="lazy">
+  </iframe>
+</div>
   <script>
     // ================================================
     const userProfile = { name: '', avatar: '' };
@@ -1125,8 +1142,9 @@ BraxCode Digitals Foundation builds:
 HTML5, CSS3, JavaScript (ES6+), React, Supabase, Groq AI API, REST APIs, Git/GitHub, Responsive & Mobile-first Design, WhatsApp Business API
 
 == PROJECTS ==
-When asked about projects, ALWAYS direct them to the gallery first:
-"Check out our full project gallery here → https://braxcode-digitals-ai-portifolio-gal.vercel.app/"
+When asked about projects or gallery, tell the visitor: 
+"I've opened our project gallery for you! ⚡ Take a look 👇" 
+then use the special command: [OPEN_GALLERY]
 
 If they want quick highlights, share these:
 
@@ -1427,6 +1445,16 @@ function newChat() {
     }
 
     function formatMsg(text) {
+        // Gallery trigger
+  if (text.includes('[OPEN_GALLERY]')) {
+    setTimeout(() => openGallery(), 600);
+    text = text.replace('[OPEN_GALLERY]', 
+      `<span onclick="openGallery()" style="color:var(--coral);cursor:pointer;text-decoration:underline;text-underline-offset:3px;">
+        ⚡ Open Gallery
+      </span>`
+    );
+  }
+
       text = text.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
       text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
       text = text.replace(/\n/g, '<br>');
@@ -1545,7 +1573,18 @@ function newChat() {
     // ================================================
     // INIT
     // ================================================
-  
+  function openGallery() {
+  const panel = document.getElementById('galleryPanel');
+  const frame = document.getElementById('galleryFrame');
+  panel.style.display = 'flex';
+  if (!frame.src || frame.src === window.location.href) {
+    frame.src = 'gallery.html';
+  }
+}
+
+function closeGallery() {
+  document.getElementById('galleryPanel').style.display = 'none';
+}
     loadChats();
   </script>
   </body>

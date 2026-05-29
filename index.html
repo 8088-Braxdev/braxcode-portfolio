@@ -239,188 +239,7 @@
         to { opacity: 1; transform: translateY(0); }
       }
 
-      /* ============================
-         PROFILE SETUP MODAL
-      ============================*/
-      #profileSetup {
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.85);
-        backdrop-filter: blur(20px);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 900;
-        padding: 20px;
-      }
-
-      #profileSetup.show { display: flex; }
-
-      .setup-card {
-        background: linear-gradient(135deg, rgba(255,76,76,0.06), rgba(255,255,255,0.03));
-        border: 1px solid var(--border2);
-        border-radius: 24px;
-        padding: 48px 40px;
-        max-width: 420px;
-        width: 100%;
-        position: relative;
-        overflow: hidden;
-        animation: cardIn 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
-        backdrop-filter: blur(40px);
-      }
-
-      @keyframes cardIn {
-        from { opacity: 0; transform: scale(0.9) translateY(20px); }
-        to { opacity: 1; transform: scale(1) translateY(0); }
-      }
-
-      .setup-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, var(--coral), transparent);
-      }
-
-      .setup-logo-sm {
-        width: 52px;
-        height: 52px;
-        margin: 0 auto 20px;
-        display: block;
-        filter: drop-shadow(0 0 10px var(--coral-glow));
-      }
-
-      .setup-title {
-        font-family: var(--font-h);
-        font-size: 0.65rem;
-        letter-spacing: 5px;
-        color: var(--coral);
-        text-align: center;
-        text-transform: uppercase;
-        margin-bottom: 8px;
-      }
-
-      .setup-heading {
-        font-family: var(--font-h);
-        font-size: 1.3rem;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 6px;
-        color: var(--text);
-      }
-
-      .setup-desc {
-        font-size: 0.82rem;
-        color: var(--text2);
-        text-align: center;
-        margin-bottom: 32px;
-        line-height: 1.6;
-      }
-
-      /* Avatar picker */
-      .avatar-picker {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 28px;
-      }
-
-      .avatar-ring {
-        width: 88px;
-        height: 88px;
-        border-radius: 50%;
-        border: 2px dashed var(--border2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-        transition: border-color 0.3s, box-shadow 0.3s;
-        background: var(--glass);
-      }
-
-      .avatar-ring:hover {
-        border-color: var(--coral);
-        box-shadow: 0 0 20px var(--coral-dim);
-      }
-
-      .avatar-ring img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 50%;
-        display: none;
-      }
-
-      .avatar-ring .av-icon {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
-        color: var(--text3);
-        font-size: 0.65rem;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-      }
-
-      .avatar-ring .av-icon i { font-size: 1.2rem; color: var(--coral); }
-
-      #avatarInput { display: none; }
-
-      .setup-input-group { margin-bottom: 20px; }
-
-      .setup-label {
-        display: block;
-        font-family: var(--font-c);
-        font-size: 0.65rem;
-        letter-spacing: 3px;
-        color: var(--coral);
-        text-transform: uppercase;
-        margin-bottom: 8px;
-      }
-
-      .setup-input {
-        width: 100%;
-        background: var(--glass);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        padding: 12px 16px;
-        color: var(--text);
-        font-family: var(--font-b);
-        font-size: 0.95rem;
-        outline: none;
-        transition: border-color 0.2s, box-shadow 0.2s;
-      }
-
-      .setup-input:focus {
-        border-color: var(--coral);
-        box-shadow: 0 0 0 3px var(--coral-dim);
-      }
-
-      .setup-input::placeholder { color: var(--text3); }
-
-      .init-btn {
-        width: 100%;
-        padding: 16px;
-        background: var(--coral);
-        border: none;
-        border-radius: 10px;
-        color: #000;
-        font-family: var(--font-h);
-        font-size: 0.72rem;
-        font-weight: 700;
-        letter-spacing: 4px;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: all 0.3s;
-        position: relative;
-        overflow: hidden;
-        margin-top: 8px;
-      }
-
-      .init-btn:hover { background: var(--coral2); box-shadow: 0 0 30px var(--coral-glow); transform: translateY(-1px); }
-      .init-btn:active { transform: translateY(0); }
-
+    
       /* ============================
          PROCESSING SCREEN
       ============================*/
@@ -1351,37 +1170,6 @@ Fully negotiable — hourly or project-based. BraxCode believes in fair pricing 
 `;
     }
 
-    // ================================================
-    // PROFILE — localStorage
-    // ================================================
-    let userProfile = { name: '', avatar: '' };
-
-    function loadProfile() {
-      const saved = localStorage.getItem('brx_profile');
-      if (saved) userProfile = JSON.parse(saved);
-    }
-
-    function saveProfile() {
-      localStorage.setItem('brx_profile', JSON.stringify(userProfile));
-    }
-
-    function getInitial(name) {
-      return name ? name.charAt(0).toUpperCase() : 'U';
-    }
-
-    function updateProfileUI() {
-      const name = userProfile.name || 'Visitor';
-      const avatar = userProfile.avatar;
-
-      // Sidebar
-      document.getElementById('sidebarName').textContent = name;
-      const sidebarAv = document.getElementById('sidebarAv');
-      if (avatar) {
-        sidebarAv.innerHTML = `<img src="${avatar}" alt=""/>`;
-      } else {
-        sidebarAv.textContent = getInitial(name);
-      }
-
       // Topbar
       document.getElementById('topbarInitial').textContent = getInitial(name);
       const topbarImg = document.getElementById('topbarImg');
@@ -1400,21 +1188,6 @@ Fully negotiable — hourly or project-based. BraxCode believes in fair pricing 
     }
 
     // ================================================
-    // AVATAR HANDLER
-    // ================================================
-    function handleAvatar(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const dataUrl = e.target.result;
-        document.getElementById('avatarPreview').src = dataUrl;
-        document.getElementById('avatarPreview').style.display = 'block';
-        document.getElementById('avIcon').style.display = 'none';
-        userProfile.avatar = dataUrl;
-      };
-      reader.readAsDataURL(file);
-    }
 
     // ================================================
     // SPLASH → SETUP → PROCESSING → MAIN
@@ -1427,25 +1200,6 @@ function enterSite() {
     runProcessing('Visitor');
   }, 800);
 }
-
-    function initSystem() {
-      const name = document.getElementById('nameInput').value.trim();
-      if (!name) {
-        document.getElementById('nameInput').style.borderColor = 'var(--coral)';
-        document.getElementById('nameInput').style.boxShadow = '0 0 0 3px var(--coral-dim)';
-        document.getElementById('nameInput').placeholder = 'Please enter your name...';
-        hapticFeedback();
-        return;
-      }
-      hapticFeedback();
-      userProfile.name = name;
-      saveProfile();
-
-      // Hide setup
-      document.getElementById('profileSetup').classList.remove('show');
-      // Show processing
-      runProcessing(name);
-    }
 
     function runProcessing(name) {
       const proc = document.getElementById('processing');
@@ -1467,12 +1221,12 @@ const steps = [
       const interval = setInterval(() => {
         if (i >= steps.length) {
           clearInterval(interval);
-          setTimeout(() => {
-            proc.classList.remove('show');
-            updateProfileUI();
-            renderChatList();
-            showWelcome();
-          }, 500);
+setTimeout(() => {
+  proc.classList.remove('show');
+  currentChatId = null; // force welcome screen
+  renderChatList();
+  showWelcome();
+}, 500)
           return;
         }
         const s = steps[i];
@@ -1500,24 +1254,6 @@ const steps = [
       }
     });
 
-    function editProfile() {
-      document.getElementById('profileDropdown').classList.remove('show');
-      // Pre-fill setup form
-      document.getElementById('nameInput').value = userProfile.name;
-      if (userProfile.avatar) {
-        document.getElementById('avatarPreview').src = userProfile.avatar;
-        document.getElementById('avatarPreview').style.display = 'block';
-        document.getElementById('avIcon').style.display = 'none';
-      }
-      document.getElementById('profileSetup').classList.add('show');
-    }
-
-    function resetProfile() {
-      if (confirm('Reset your identity? This will clear your profile and chat history.')) {
-        localStorage.clear();
-        location.reload();
-      }
-    }
 
     function clearHistory() {
       if (confirm('Clear all chat history?')) {
@@ -1559,15 +1295,15 @@ const steps = [
 
     // ================================================
     // CHAT MANAGEMENT
-    // ================================================
-    function newChat() {
-      const id = 'chat_' + Date.now();
-      chats[id] = { id, title: 'New conversation', messages: [], createdAt: Date.now() };
-      saveChats();
-      switchChat(id);
-      renderChatList();
-      if (window.innerWidth <= 768) toggleSidebar();
-    }
+function newChat() {
+  const id = 'chat_' + Date.now();
+  chats[id] = { id, title: 'New conversation', messages: [], createdAt: Date.now() };
+  saveChats();
+  currentChatId = id;
+  renderChatList();
+  showWelcome(); // badilisha renderMessages() → showWelcome()
+  if (window.innerWidth <= 768) toggleSidebar();
+}
 
     function switchChat(id) {
       currentChatId = id;
@@ -1636,7 +1372,7 @@ const steps = [
             <circle cx="100" cy="100" r="72" fill="none" stroke="#ff4c4c" stroke-width="2" stroke-dasharray="6 4" opacity="0.4"/>
             <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/>
           </svg>
-          <h1>Welcome to<span>BraxCode</span>Digitals Foundation</h1>
+          <h1>Welcome to <span>BraxCode </span>Digitals Foundation</h1>
           <p>We build AI systems, custom web apps & digital solutions from Mwanza, Tanzania 🇹🇿. Ask Nexus anything about our work — or explore below.</p>
           <div class="suggestions-grid">
             <button class="sug-card" onclick="quickSend('Tell me about BraxCode Digitals Foundation.')">

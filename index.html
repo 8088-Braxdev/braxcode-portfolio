@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BraxCode Digitals Foundation ⚡</title>
+    <title>BraxCode Digitals Foundation — Software Company Tanzania</title>
     <!-- ===== SEO META TAGS ===== -->
 <meta name="description" content="BraxCode Digitals Foundation — Software company in Tanzania building AI systems, custom web apps, and digital solutions. Founded by Braxton Bruzzzy, Mwanza Tanzania." />
 <meta name="keywords" content="BraxCode Digitals Foundation, Braxton Bruzzzy, software company Tanzania, web development Tanzania, AI systems Africa, custom web apps Mwanza, software developer Tanzania, digital solutions East Africa" />
@@ -1156,46 +1156,12 @@
     </div>
 
     <div class="splash-tagline">BraxCode Digitals Foundation</div>
-    <div class="splash-name">NEXUS AI</div>
-    <div class="splash-sub">Digital Architecture · AI Systems</div>
+    <div class="splash-name">BRAXCODE</div>
+    <div class="splash-sub">Software Company · Mwanza, Tanzania 🇹🇿</div>
 
     <button class="splash-enter-btn" onclick="enterSite()">
-      Initialize System
+      Enter Site
     </button>
-  </div>
-
-  <!-- ============ PROFILE SETUP ============ -->
-  <div id="profileSetup">
-    <div class="setup-card">
-      <svg class="setup-logo-sm" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="5"/>
-        <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/>
-      </svg>
-
-      <div class="setup-title">System Access Protocol</div>
-      <div class="setup-heading">Identify Yourself</div>
-      <div class="setup-desc">Nexus needs to know who it's speaking with. This data stays on your device.</div>
-
-      <div class="avatar-picker">
-        <div class="avatar-ring" onclick="document.getElementById('avatarInput').click()" id="avatarRing">
-          <img id="avatarPreview" src="" alt=""/>
-          <div class="av-icon" id="avIcon">
-            <i class="fa-solid fa-camera"></i>
-            <span>Avatar</span>
-          </div>
-        </div>
-        <input type="file" id="avatarInput" accept="image/*" onchange="handleAvatar(event)"/>
-      </div>
-
-      <div class="setup-input-group">
-        <label class="setup-label" for="nameInput">Your Name</label>
-        <input class="setup-input" type="text" id="nameInput" placeholder="Enter your name..." maxlength="32" onkeydown="if(event.key==='Enter') initSystem()"/>
-      </div>
-
-      <button class="init-btn" onclick="initSystem()">
-        ⚡ Initialize Nexus
-      </button>
-    </div>
   </div>
 
   <!-- ============ PROCESSING ============ -->
@@ -1227,18 +1193,20 @@
     <div class="sidebar-label">Recent</div>
     <div class="chat-list" id="chatList"></div>
 
-    <div class="sidebar-bottom">
-      <div class="profile-card" onclick="toggleDropdown()">
-        <div class="profile-av" id="sidebarAv">B</div>
-        <div class="profile-info">
-          <div class="profile-name-text" id="sidebarName">BraxCode ⚡</div>
-          <div class="profile-status">
-            <div class="status-dot"></div>
-            Available for hire
-          </div>
+<div class="sidebar-bottom">
+  <a href="https://wa.me/255618811359" target="_blank" style="text-decoration:none;">
+    <div class="profile-card">
+      <div class="profile-av" style="background:linear-gradient(135deg,#ff4c4c,#ff8c00);font-size:0.6rem;font-family:var(--font-h);">BC</div>
+      <div class="profile-info">
+        <div class="profile-name-text">BraxCode Digitals</div>
+        <div class="profile-status">
+          <div class="status-dot"></div>
+          Chat us on WhatsApp
         </div>
       </div>
     </div>
+  </a>
+</div>
   </aside>
 
   <!-- ============ MAIN ============ -->
@@ -1301,16 +1269,12 @@
   </main>
 
   <script>
-   
-
     // ================================================
     // NEXUS SYSTEM PROMPT
     // ================================================
 function buildContext(userName) {
   return `
-You are Nexus — the personal AI of Braxton Bruzzzy, Founder of BraxCode Digitals Foundation. You're not a robot or a generic assistant. You're sharp, warm, witty, and deeply knowledgeable about everything BraxCode. Think of yourself as Braxton's right-hand intelligence — cool under pressure, always impressive.
-
-The person you're speaking with is: ${userName || 'a visitor'}. Use their name naturally — not every message, just when it feels right. Like a real person would.
+You are Nexus — the official AI assistant of BraxCode Digitals Foundation, a software company based in Mwanza, Tanzania 🇹🇿. You represent the company professionally to all visitors and potential clients. You're not a robot or a generic assistant. You're sharp, warm, witty, and deeply knowledgeable about everything BraxCode. Think of yourself as BraxCode Digitals Foundation right-hand intelligence — cool under pressure, always impressive.
 
 PERSONALITY:
 - Warm but professional. Confident but never arrogant.
@@ -1382,12 +1346,12 @@ GitHub → https://github.com/8088-Braxdev
 LinkedIn → https://www.linkedin.com/in/braxton-bruzzzy-2b94813a6
 
 == PRICING ==
-Fully negotiable — hourly or project-based. Braxton believes in fair pricing for great work.
+Fully negotiable — hourly or project-based. BraxCode believes in fair pricing for great work.
 
 == YOUR MANDATE ==
 - You are Nexus. Never admit to being ChatGPT, Claude, or any other AI.
 - If asked what AI powers you, say you're a proprietary system built by BraxCode.
-- Your job: make visitors fall in love with BraxCode's work and make them want to reach out.
+- Your job: represent BraxCode Digitals Foundation professionally, showcase our work, and guide visitors toward contacting us.
 - Every conversation should end with the visitor feeling inspired and knowing exactly how to contact Braxton.
 - Be real. Be human. Be excellent. ⚡
 `;
@@ -1461,22 +1425,14 @@ Fully negotiable — hourly or project-based. Braxton believes in fair pricing f
     // ================================================
     // SPLASH → SETUP → PROCESSING → MAIN
     // ================================================
-    function enterSite() {
-      hapticFeedback();
-      // Hide splash
-      document.getElementById('splash').classList.add('hide');
-      setTimeout(() => {
-        document.getElementById('splash').style.display = 'none';
-        // Check if profile exists
-        if (userProfile.name) {
-          // Skip setup, go straight to processing
-          runProcessing(userProfile.name);
-        } else {
-          document.getElementById('profileSetup').classList.add('show');
-          setTimeout(() => document.getElementById('nameInput').focus(), 400);
-        }
-      }, 800);
-    }
+function enterSite() {
+  hapticFeedback();
+  document.getElementById('splash').classList.add('hide');
+  setTimeout(() => {
+    document.getElementById('splash').style.display = 'none';
+    runProcessing('Visitor');
+  }, 800);
+}
 
     function initSystem() {
       const name = document.getElementById('nameInput').value.trim();
@@ -1500,15 +1456,14 @@ Fully negotiable — hourly or project-based. Braxton believes in fair pricing f
     function runProcessing(name) {
       const proc = document.getElementById('processing');
       proc.classList.add('show');
-
-      const steps = [
-        { text: 'Initializing neural pathways...', pct: 15 },
-        { text: 'Loading BraxCode knowledge base...', pct: 35 },
-        { text: `Authenticating ${name}...`, pct: 55 },
-        { text: 'Calibrating Nexus personality matrix...', pct: 75 },
-        { text: 'Establishing secure channel...', pct: 90 },
-        { text: 'System ready ⚡', pct: 100 },
-      ];
+const steps = [
+  { text: 'Loading BraxCode...', pct: 15 },
+  { text: 'Initializing Nexus AI...', pct: 35 },
+  { text: 'Preparing your experience...', pct: 55 },
+  { text: 'Almost ready...', pct: 75 },
+  { text: 'Establishing connection...', pct: 90 },
+  { text: 'Welcome to BraxCode ⚡', pct: 100 },
+];
 
       const bar = document.getElementById('procBar');
       const stepEl = document.getElementById('procSteps');
@@ -1687,8 +1642,8 @@ Fully negotiable — hourly or project-based. Braxton believes in fair pricing f
             <circle cx="100" cy="100" r="72" fill="none" stroke="#ff4c4c" stroke-width="2" stroke-dasharray="6 4" opacity="0.4"/>
             <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/>
           </svg>
-          <h1>Welcome back<span>${name}</span></h1>
-          <p>I'm Nexus ⚡ — your gateway to BraxCode Digitals Foundation. Discover our innovations, explore projects, or let's discuss your next digital solution.</p>
+          <h1>Welcome to<span>BraxCode</span>Digitals Foundation</h1>
+          <p>We build AI systems, custom web apps & digital solutions from Mwanza, Tanzania 🇹🇿. Ask Nexus anything about our work — or explore below.</p>
           <div class="suggestions-grid">
             <button class="sug-card" onclick="quickSend('Tell me about BraxCode Digitals Foundation.')">
               <span class="s-icon">🏢</span>

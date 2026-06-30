@@ -1419,12 +1419,12 @@
     </iframe>
   </div>
   <script>
-    // ================================================
-    const userProfile = { name: '', avatar: '' };
-    // NEXUS SYSTEM PROMPT
-    // ================================================
-    function buildContext(userName) {
-      return `
+  // ================================================
+const userProfile = { name: '', avatar: '' };
+// NEXUS SYSTEM PROMPT
+// ================================================
+function buildContext(userName) {
+  return `
 You are Nexus — the official AI assistant of BraxCode Digitals Foundation, a software company based in Mwanza, Tanzania 🇹🇿. You represent the company professionally to all visitors and potential clients. You're not a robot or a generic assistant. You're sharp, warm, witty, and deeply knowledgeable about everything BraxCode. Think of yourself as BraxCode Digitals Foundation right-hand intelligence — cool under pressure, always impressive.
 
 PERSONALITY:
@@ -1507,413 +1507,412 @@ Fully negotiable — hourly or project-based. BraxCode believes in fair pricing 
 - Every conversation should end with the visitor feeling inspired and knowing exactly how to contact BraxCode Digitals.
 - Be real. Be human. Be excellent. ⚡
 `;
-    }
+}
 
-    // ================================================
-    // SPLASH → SETUP → PROCESSING → MAIN
-    // ================================================
-    function enterSite() {
-      hapticFeedback();
-      document.getElementById('splash').classList.add('hide');
+// ================================================
+// SPLASH → SETUP → PROCESSING → MAIN
+// ================================================
+function enterSite() {
+  hapticFeedback();
+  document.getElementById('splash').classList.add('hide');
+  setTimeout(() => {
+    document.getElementById('splash').style.display = 'none';
+    runProcessing('Visitor');
+  }, 800);
+}
+
+function runProcessing(name) {
+  const proc = document.getElementById('processing');
+  proc.classList.add('show');
+  const steps = [
+    { text: 'Loading BraxCode...', pct: 15 },
+    { text: 'Initializing Nexus AI...', pct: 35 },
+    { text: 'Preparing your experience...', pct: 55 },
+    { text: 'Almost ready...', pct: 75 },
+    { text: 'Establishing connection...', pct: 90 },
+    { text: 'Welcome to BraxCode ⚡', pct: 100 },
+  ];
+
+  const bar = document.getElementById('procBar');
+  const stepEl = document.getElementById('procSteps');
+  const textEl = document.getElementById('procText');
+
+  let i = 0;
+  const interval = setInterval(() => {
+    if (i >= steps.length) {
+      clearInterval(interval);
       setTimeout(() => {
-        document.getElementById('splash').style.display = 'none';
-        runProcessing('Visitor');
-      }, 800);
-    }
-
-    function runProcessing(name) {
-      const proc = document.getElementById('processing');
-      proc.classList.add('show');
-      const steps = [
-        { text: 'Loading BraxCode...', pct: 15 },
-        { text: 'Initializing Nexus AI...', pct: 35 },
-        { text: 'Preparing your experience...', pct: 55 },
-        { text: 'Almost ready...', pct: 75 },
-        { text: 'Establishing connection...', pct: 90 },
-        { text: 'Welcome to BraxCode ⚡', pct: 100 },
-      ];
-
-      const bar = document.getElementById('procBar');
-      const stepEl = document.getElementById('procSteps');
-      const textEl = document.getElementById('procText');
-
-      let i = 0;
-      const interval = setInterval(() => {
-        if (i >= steps.length) {
-          clearInterval(interval);
-          setTimeout(() => {
-            proc.classList.remove('show');
-            currentChatId = null; // force welcome screen
-            renderChatList();
-            showWelcome();
-          }, 500)
-          return;
-        }
-        const s = steps[i];
-        bar.style.width = s.pct + '%';
-        stepEl.textContent = s.text;
-        if (i === 0) textEl.textContent = 'Booting Nexus AI...';
-        if (i === 3) textEl.textContent = 'Almost there...';
-        if (i === 5) textEl.textContent = 'Welcome, ' + name + ' ⚡';
-        i++;
-      }, 500);
-    }
-
-    // ================================================
-    // DROPDOWN
-    // ================================================
-    function toggleDropdown() {
-      document.getElementById('profileDropdown').classList.toggle('show');
-    }
-
-    document.addEventListener('click', function (e) {
-      const drop = document.getElementById('profileDropdown');
-      const prof = document.getElementById('topbarProfile');
-      if (!drop.contains(e.target) && !prof.contains(e.target)) {
-        drop.classList.remove('show');
-      }
-    });
-
-
-    function clearHistory() {
-      if (confirm('Clear all chat history?')) {
-        chats = {};
-        saveChats();
-        currentChatId = null;
+        proc.classList.remove('show');
+        currentChatId = null; // force welcome screen
         renderChatList();
         showWelcome();
-        document.getElementById('profileDropdown').classList.remove('show');
-      }
+      }, 500)
+      return;
     }
+    const s = steps[i];
+    bar.style.width = s.pct + '%';
+    stepEl.textContent = s.text;
+    if (i === 0) textEl.textContent = 'Booting Nexus AI...';
+    if (i === 3) textEl.textContent = 'Almost there...';
+    if (i === 5) textEl.textContent = 'Welcome, ' + name + ' ⚡';
+    i++;
+  }, 500);
+}
 
-    // ================================================
-    // HAPTIC FEEDBACK (vibration API)
-    // ================================================
-    function hapticFeedback(pattern = [10]) {
-      if (navigator.vibrate) navigator.vibrate(pattern);
-    }
+// ================================================
+// DROPDOWN
+// ================================================
+function toggleDropdown() {
+  document.getElementById('profileDropdown').classList.toggle('show');
+}
 
-    // ================================================
-    // CHAT STATE
-    // ================================================
-    let currentChatId = null;
-    let chats = {};
+document.addEventListener('click', function (e) {
+  const drop = document.getElementById('profileDropdown');
+  const prof = document.getElementById('topbarProfile');
+  if (!drop.contains(e.target) && !prof.contains(e.target)) {
+    drop.classList.remove('show');
+  }
+});
 
-    function saveChats() { localStorage.setItem('brx_chats', JSON.stringify(chats)); }
-    function loadChats() {
-      const s = localStorage.getItem('brx_chats');
-      if (s) chats = JSON.parse(s);
-    }
 
-    // ================================================
-    // SIDEBAR
-    // ================================================
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
-      document.getElementById('overlay').classList.toggle('open');
-    }
+function clearHistory() {
+  if (confirm('Clear all chat history?')) {
+    chats = {};
+    saveChats();
+    currentChatId = null;
+    renderChatList();
+    showWelcome();
+    document.getElementById('profileDropdown').classList.remove('show');
+  }
+}
 
-    // ================================================
-    // CHAT MANAGEMENT
-    function newChat() {
-      const id = 'chat_' + Date.now();
-      chats[id] = { id, title: 'New conversation', messages: [], createdAt: Date.now() };
-      saveChats();
-      currentChatId = id;
-      renderChatList();
-      showWelcome(); // badilisha renderMessages() → showWelcome()
-      if (window.innerWidth <= 768) toggleSidebar();
-    }
+// ================================================
+// HAPTIC FEEDBACK (vibration API)
+// ================================================
+function hapticFeedback(pattern = [10]) {
+  if (navigator.vibrate) navigator.vibrate(pattern);
+}
 
-    function switchChat(id) {
-      currentChatId = id;
-      renderChatList();
-      renderMessages();
-    }
+// ================================================
+// CHAT STATE
+// ================================================
+let currentChatId = null;
+let chats = {};
 
-    function deleteChat(id, e) {
-      e.stopPropagation();
-      hapticFeedback([5, 5, 5]);
-      delete chats[id];
-      saveChats();
-      if (currentChatId === id) {
-        const rem = Object.keys(chats);
-        if (rem.length > 0) switchChat(rem[rem.length - 1]);
-        else { currentChatId = null; showWelcome(); }
-      }
-      renderChatList();
-    }
+function saveChats() { localStorage.setItem('brx_chats', JSON.stringify(chats)); }
+function loadChats() {
+  const s = localStorage.getItem('brx_chats');
+  if (s) chats = JSON.parse(s);
+}
 
-    function updateChatTitle(id, firstMsg) {
-      if (chats[id]) {
-        chats[id].title = firstMsg.slice(0, 40) + (firstMsg.length > 40 ? '...' : '');
-        saveChats();
-        renderChatList();
-      }
-    }
+// ================================================
+// SIDEBAR
+// ================================================
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
 
-    // ================================================
-    // RENDER CHAT LIST
-    // ================================================
-    function renderChatList() {
-      const list = document.getElementById('chatList');
-      const sorted = Object.values(chats).sort((a, b) => b.createdAt - a.createdAt);
-      if (sorted.length === 0) {
-        list.innerHTML = `<div style="padding:12px 14px;font-size:0.75rem;color:var(--text3);font-family:var(--font-c);">No conversations yet</div>`;
-        return;
-      }
-      list.innerHTML = sorted.map(chat => `
-        <div class="chat-item ${chat.id === currentChatId ? 'active' : ''}" onclick="switchChat('${chat.id}')">
-          <span class="chat-item-text">${chat.title}</span>
-          <button class="chat-delete" onclick="deleteChat('${chat.id}', event)">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-      `).join('');
-    }
+// ================================================
+// CHAT MANAGEMENT
+function newChat() {
+  const id = 'chat_' + Date.now();
+  chats[id] = { id, title: 'New conversation', messages: [], createdAt: Date.now() };
+  saveChats();
+  currentChatId = id;
+  renderChatList();
+  showWelcome(); // badilisha renderMessages() → showWelcome()
+  if (window.innerWidth <= 768) toggleSidebar();
+}
 
-    // ================================================
-    // LOGO SVG INLINE (reusable)
-    // ================================================
-    const LOGO_SVG = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;">
-      <circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="7"/>
-      <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/>
-    </svg>`;
+function switchChat(id) {
+  currentChatId = id;
+  renderChatList();
+  renderMessages();
+}
 
-    // ================================================
-    // WELCOME SCREEN
-    // ================================================
-    function showWelcome() {
-      const name = userProfile.name ? `, ${userProfile.name}` : '';
-      document.getElementById('messagesInner').innerHTML = `
-        <div class="welcome">
-          <svg class="welcome-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="5"/>
-            <circle cx="100" cy="100" r="72" fill="none" stroke="#ff4c4c" stroke-width="2" stroke-dasharray="6 4" opacity="0.4"/>
-            <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/>
-          </svg>
-          <h1>Welcome to <span>BraxCode </span>Digitals Foundation</h1>
-          <p>We build AI systems, custom web apps & digital solutions from Mwanza, Tanzania 🇹🇿. Ask Nexus anything about our work — or explore below.</p>
-          <div class="suggestions-grid">
-            <button class="sug-card" onclick="quickSend('Tell me about BraxCode Digitals Foundation.')">
-              <span class="s-icon">🏢</span>
-              <div class="s-title">About Us</div>
-              <div class="s-sub">Mission & Vision</div>
-            </button>
-            <button class="sug-card" onclick="quickSend('What services does BraxCode Digitals Foundation provide?')">
-              <span class="s-icon">🛠️</span>
-              <div class="s-title">Services</div>
-              <div class="s-sub">What we build</div>
-            </button>
-            <button class="sug-card" onclick="quickSend('Show me the latest projects by BraxCode Digitals.')">
-              <span class="s-icon">🚀</span>
-              <div class="s-title">Projects</div>
-              <div class="s-sub">Our work</div>
-            </button>
-            <button class="sug-card" onclick="quickSend('What are BraxCode Digitals main technical skills?')">
-              <span class="s-icon">⚡</span>
-              <div class="s-title">Skills</div>
-              <div class="s-sub">Tech stack</div>
-            </button>
-            <button class="sug-card" onclick="quickSend('I would like to see the BraxCode company profile and CV.')">
-              <span class="s-icon">📄</span>
-              <div class="s-title">Company Profile</div>
-              <div class="s-sub">Full CV</div>
-            </button>
-            <button class="sug-card" onclick="quickSend('How can I contact BraxCode Digitals Foundation?')">
-              <span class="s-icon">📩</span>
-              <div class="s-title">Contact</div>
-              <div class="s-sub">Get in touch</div>
-            </button>
-          </div>
-        </div>
-      `;
-    }
+function deleteChat(id, e) {
+  e.stopPropagation();
+  hapticFeedback([5, 5, 5]);
+  delete chats[id];
+  saveChats();
+  if (currentChatId === id) {
+    const rem = Object.keys(chats);
+    if (rem.length > 0) switchChat(rem[rem.length - 1]);
+    else { currentChatId = null; showWelcome(); }
+  }
+  renderChatList();
+}
 
-    // ================================================
-    // RENDER MESSAGES
-    // ================================================
-    function renderMessages() {
-      const inner = document.getElementById('messagesInner');
-      if (!currentChatId || !chats[currentChatId] || chats[currentChatId].messages.length === 0) {
-        showWelcome(); return;
-      }
-      inner.innerHTML = chats[currentChatId].messages.map(m => buildMsgHTML(m.role, m.content)).join('');
-      scrollToBottom();
-    }
+function updateChatTitle(id, firstMsg) {
+  if (chats[id]) {
+    chats[id].title = firstMsg.slice(0, 40) + (firstMsg.length > 40 ? '...' : '');
+    saveChats();
+    renderChatList();
+  }
+}
 
-    function buildMsgHTML(role, content) {
-      const isBot = role === 'assistant';
-      const avatar = userProfile.avatar;
-      const name = userProfile.name || 'You';
+// ================================================
+// RENDER CHAT LIST
+// ================================================
+function renderChatList() {
+  const list = document.getElementById('chatList');
+  const sorted = Object.values(chats).sort((a, b) => b.createdAt - a.createdAt);
+  if (sorted.length === 0) {
+    list.innerHTML = `<div style="padding:12px 14px;font-size:0.75rem;color:var(--text3);font-family:var(--font-c);">No conversations yet</div>`;
+    return;
+  }
+  list.innerHTML = sorted.map(chat => `
+    <div class="chat-item ${chat.id === currentChatId ? 'active' : ''}" onclick="switchChat('${chat.id}')">
+      <span class="chat-item-text">${chat.title}</span>
+      <button class="chat-delete" onclick="deleteChat('${chat.id}', event)">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  `).join('');
+}
 
-      const avHTML = isBot
-        ? `<div class="msg-av bot">${LOGO_SVG}</div>`
-        : `<div class="msg-av usr">${avatar ? `<img src="${avatar}" alt=""/>` : `<i class="fa-solid fa-user" style="font-size:0.65rem"></i>`}</div>`;
+// ================================================
+// LOGO SVG INLINE (reusable)
+// ================================================
+const LOGO_SVG = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;">
+  <circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="7"/>
+  <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/>
+</svg>`;
 
-      return `
-        <div class="message-row ${isBot ? '' : 'user'}">
-          ${avHTML}
-          <div class="msg-content">
-            <div class="msg-name">${isBot ? 'Nexus ⚡' : name}</div>
-            <div class="msg-bubble ${isBot ? 'bot' : 'usr'}">${formatMsg(content)}</div>
-          </div>
-        </div>
-      `;
-    }
+// ================================================
+// WELCOME SCREEN
+// ================================================
+function showWelcome() {
+  const name = userProfile.name ? `, ${userProfile.name}` : '';
+  document.getElementById('messagesInner').innerHTML = `
+    <div class="welcome">
+      <svg class="welcome-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="5"/>
+        <circle cx="100" cy="100" r="72" fill="none" stroke="#ff4c4c" stroke-width="2" stroke-dasharray="6 4" opacity="0.4"/>
+        <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/>
+      </svg>
+      <h1>Welcome to <span>BraxCode </span>Digitals Foundation</h1>
+      <p>We build AI systems, custom web apps & digital solutions from Mwanza, Tanzania 🇹🇿. Ask Nexus anything about our work — or explore below.</p>
+      <div class="suggestions-grid">
+        <button class="sug-card" onclick="quickSend('Tell me about BraxCode Digitals Foundation.')">
+          <span class="s-icon">🏢</span>
+          <div class="s-title">About Us</div>
+          <div class="s-sub">Mission & Vision</div>
+        </button>
+        <button class="sug-card" onclick="quickSend('What services does BraxCode Digitals Foundation provide?')">
+          <span class="s-icon">🛠️</span>
+          <div class="s-title">Services</div>
+          <div class="s-sub">What we build</div>
+        </button>
+        <button class="sug-card" onclick="quickSend('Show me the latest projects by BraxCode Digitals.')">
+          <span class="s-icon">🚀</span>
+          <div class="s-title">Projects</div>
+          <div class="s-sub">Our work</div>
+        </button>
+        <button class="sug-card" onclick="quickSend('What are BraxCode Digitals main technical skills?')">
+          <span class="s-icon">⚡</span>
+          <div class="s-title">Skills</div>
+          <div class="s-sub">Tech stack</div>
+        </button>
+        <button class="sug-card" onclick="quickSend('I would like to see the BraxCode company profile and CV.')">
+          <span class="s-icon">📄</span>
+          <div class="s-title">Company Profile</div>
+          <div class="s-sub">Full CV</div>
+        </button>
+        <button class="sug-card" onclick="quickSend('How can I contact BraxCode Digitals Foundation?')">
+          <span class="s-icon">📩</span>
+          <div class="s-title">Contact</div>
+          <div class="s-sub">Get in touch</div>
+        </button>
+      </div>
+    </div>
+  `;
+}
 
-    function formatMsg(text) {
-      // Gallery trigger
-      if (text.includes('[OPEN_GALLERY]')) {
-        text = text.replace('[OPEN_GALLERY]',
-          `<span onclick="openGallery()" style="color:var(--coral);cursor:pointer;text-decoration:underline;text-underline-offset:3px;">
-        ⚡ Open Gallery
-      </span>`
-        );
-      }
+// ================================================
+// RENDER MESSAGES
+// ================================================
+function renderMessages() {
+  const inner = document.getElementById('messagesInner');
+  if (!currentChatId || !chats[currentChatId] || chats[currentChatId].messages.length === 0) {
+    showWelcome(); return;
+  }
+  inner.innerHTML = chats[currentChatId].messages.map(m => buildMsgHTML(m.role, m.content)).join('');
+  scrollToBottom();
+}
 
-      text = text.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
-      text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-      text = text.replace(/\n/g, '<br>');
-      return text;
-    }
+function buildMsgHTML(role, content) {
+  const isBot = role === 'assistant';
+  const avatar = userProfile.avatar;
+  const name = userProfile.name || 'You';
 
-    // ================================================
-    // SEND MESSAGE
-    // ================================================
-    async function sendMessage() {
-      const input = document.getElementById('messageInput');
-      const text = input.value.trim();
-      if (!text) return;
+  const avHTML = isBot
+    ? `<div class="msg-av bot">${LOGO_SVG}</div>`
+    : `<div class="msg-av usr">${avatar ? `<img src="${avatar}" alt=""/>` : `<i class="fa-solid fa-user" style="font-size:0.65rem"></i>`}</div>`;
 
-      hapticFeedback([8]);
+  return `
+    <div class="message-row ${isBot ? '' : 'user'}">
+      ${avHTML}
+      <div class="msg-content">
+        <div class="msg-name">${isBot ? 'Nexus ⚡' : name}</div>
+        <div class="msg-bubble ${isBot ? 'bot' : 'usr'}">${formatMsg(content)}</div>
+      </div>
+    </div>
+  `;
+}
 
-      if (!currentChatId) {
-        const id = 'chat_' + Date.now();
-        chats[id] = { id, title: text.slice(0, 40), messages: [], createdAt: Date.now() };
-        currentChatId = id;
-        saveChats();
-        renderChatList();
-      }
+function formatMsg(text) {
+  // Gallery trigger
+  if (text.includes('[OPEN_GALLERY]')) {
+    text = text.replace('[OPEN_GALLERY]',
+      `<span onclick="openGallery()" style="color:var(--coral);cursor:pointer;text-decoration:underline;text-underline-offset:3px;">
+    ⚡ Open Gallery
+  </span>`
+    );
+  }
 
-      if (chats[currentChatId].messages.length === 0) updateChatTitle(currentChatId, text);
+  text = text.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+  text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  text = text.replace(/\n/g, '<br>');
+  return text;
+}
 
-      chats[currentChatId].messages.push({ role: 'user', content: text });
-      saveChats();
+// ================================================
+// SEND MESSAGE
+// ================================================
+async function sendMessage() {
+  const input = document.getElementById('messageInput');
+  const text = input.value.trim();
+  if (!text) return;
 
-      input.value = '';
-      input.style.height = 'auto';
-      document.getElementById('sendBtn').classList.remove('active');
+  hapticFeedback([8]);
 
-      const inner = document.getElementById('messagesInner');
-      inner.innerHTML += buildMsgHTML('user', text);
+  if (!currentChatId) {
+    const id = 'chat_' + Date.now();
+    chats[id] = { id, title: text.slice(0, 40), messages: [], createdAt: Date.now() };
+    currentChatId = id;
+    saveChats();
+    renderChatList();
+  }
 
-      const typingId = 'typing_' + Date.now();
-      inner.innerHTML += `
-        <div class="message-row" id="${typingId}">
-          <div class="msg-av bot">${LOGO_SVG}</div>
-          <div class="msg-content">
-            <div class="msg-name">Nexus ⚡</div>
-            <div class="typing-indicator">
-              <div class="typing-dot"></div>
-              <div class="typing-dot"></div>
-              <div class="typing-dot"></div>
-            </div>
-          </div>
-        </div>
-      `;
-      scrollToBottom();
+  if (chats[currentChatId].messages.length === 0) updateChatTitle(currentChatId, text);
 
-  try {
-  const msgs = chats[currentChatId].messages.map(m => ({ role: m.role, content: m.content }));
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 25000); // 25s timeout
-
-  const res = await fetch('/api/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    signal: controller.signal,
-    body: JSON.stringify({
-      messages: [
-        { role: 'system', content: buildContext(userProfile.name) },
-        ...msgs
-      ]
-    })
-  });
-
-  clearTimeout(timeoutId);
-
-  const data = await res.json();
-  document.getElementById(typingId)?.remove();
-
-  if (data.error) throw new Error(data.error.message || 'API error');
-
-  const reply = data.choices[0].message.content;
-  chats[currentChatId].messages.push({ role: 'assistant', content: reply });
+  chats[currentChatId].messages.push({ role: 'user', content: text });
   saveChats();
 
-  inner.innerHTML += buildMsgHTML('assistant', reply);
-  scrollToBottom();
-  hapticFeedback([5]);
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('sendBtn').classList.remove('active');
 
-} catch (err) {
-  document.getElementById(typingId)?.remove();
-  const msg = err.name === 'AbortError' 
-    ? 'Mtandao ni mbovu kidogo — jaribu tena ukiwa na network nzuri zaidi. ⚡' 
-    : 'Connection issue — please check your network and try again. ⚡';
-  inner.innerHTML += buildMsgHTML('assistant', msg);
+  const inner = document.getElementById('messagesInner');
+  inner.innerHTML += buildMsgHTML('user', text);
+
+  const typingId = 'typing_' + Date.now();
+  inner.innerHTML += `
+    <div class="message-row" id="${typingId}">
+      <div class="msg-av bot">${LOGO_SVG}</div>
+      <div class="msg-content">
+        <div class="msg-name">Nexus ⚡</div>
+        <div class="typing-indicator">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>
+    </div>
+  `;
   scrollToBottom();
+
+  try {
+    const msgs = chats[currentChatId].messages.map(m => ({ role: m.role, content: m.content }));
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 25000); // 25s timeout
+
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
+      body: JSON.stringify({
+        messages: [
+          { role: 'system', content: buildContext(userProfile.name) },
+          ...msgs
+        ]
+      })
+    });
+
+    clearTimeout(timeoutId);
+
+    const data = await res.json();
+    document.getElementById(typingId)?.remove();
+
+    if (data.error) throw new Error(data.error.message || 'API error');
+
+    const reply = data.choices[0].message.content;
+    chats[currentChatId].messages.push({ role: 'assistant', content: reply });
+    saveChats();
+
+    inner.innerHTML += buildMsgHTML('assistant', reply);
+    scrollToBottom();
+    hapticFeedback([5]);
+
+  } catch (err) {
+    document.getElementById(typingId)?.remove();
+    const msg = err.name === 'AbortError'
+      ? 'Mtandao ni mbovu kidogo — jaribu tena ukiwa na network nzuri zaidi. ⚡'
+      : 'Connection issue — please check your network and try again. ⚡';
+    inner.innerHTML += buildMsgHTML('assistant', msg);
+    scrollToBottom();
+  }
 }
-} catch (err) {
-  document.getElementById(typingId)?.remove();
-  const msg = err.name === 'AbortError' 
-    ? 'Mtandao ni mbovu kidogo — jaribu tena ukiwa na network nzuri zaidi. ⚡' 
-    : 'Connection issue — please check your network and try again. ⚡';
-  inner.innerHTML += buildMsgHTML('assistant', msg);
-  scrollToBottom();
+
+function quickSend(text) {
+  document.getElementById('messageInput').value = text;
+  document.getElementById('sendBtn').classList.add('active');
+  sendMessage();
 }
-}  
 
-    // ================================================
-    // INPUT HANDLERS
-    // ================================================
-    function handleInput(el) {
-      el.style.height = 'auto';
-      el.style.height = Math.min(el.scrollHeight, 150) + 'px';
-      const btn = document.getElementById('sendBtn');
-      if (el.value.trim()) btn.classList.add('active');
-      else btn.classList.remove('active');
-    }
+// ================================================
+// INPUT HANDLERS
+// ================================================
+function handleInput(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 150) + 'px';
+  const btn = document.getElementById('sendBtn');
+  if (el.value.trim()) btn.classList.add('active');
+  else btn.classList.remove('active');
+}
 
-    function handleKeydown(e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    }
+function handleKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
 
-    function scrollToBottom() {
-      const wrap = document.getElementById('messagesWrap');
-      setTimeout(() => { wrap.scrollTop = wrap.scrollHeight; }, 50);
-    }
+function scrollToBottom() {
+  const wrap = document.getElementById('messagesWrap');
+  setTimeout(() => { wrap.scrollTop = wrap.scrollHeight; }, 50);
+}
 
-    // ================================================
-    // INIT
-    // ================================================
-    function openGallery() {
-      const panel = document.getElementById('galleryPanel');
-      const frame = document.getElementById('galleryFrame');
-      panel.style.display = 'flex';
-      if (!frame.src || frame.src === window.location.href) {
-        frame.src = 'gallery.html';
-      }
-    }
+// ================================================
+// INIT
+// ================================================
+function openGallery() {
+  const panel = document.getElementById('galleryPanel');
+  const frame = document.getElementById('galleryFrame');
+  panel.style.display = 'flex';
+  if (!frame.src || frame.src === window.location.href) {
+    frame.src = 'gallery.html';
+  }
+}
 
-    function closeGallery() {
-      document.getElementById('galleryPanel').style.display = 'none';
-    }
-    loadChats();
+function closeGallery() {
+  document.getElementById('galleryPanel').style.display = 'none';
+}
+loadChats();
+
   </script>
 </body>
 

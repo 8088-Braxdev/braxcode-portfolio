@@ -35,4 +35,3 @@ Module.exports = async function handler(req, res) {
     return res.status(500).json({ error: err.message });
   }
 }
-Mmmh rewrite hi9 code kufatisha io model usiharibu maana yoyote usifanye makosa

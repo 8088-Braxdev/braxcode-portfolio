@@ -21,7 +21,7 @@ module.exports = async function handler(req, res) {
         'Authorization': `Bearer ${key}`
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: 'gpt-oss-120b',
         messages,
         max_tokens: 420,
         temperature: 0.75

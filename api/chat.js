@@ -27,7 +27,7 @@ module.exports = async function handler(req, res) {
       body: JSON.stringify({
         model: 'openai/gpt-oss-120b', // Model ID sahihi
         messages,
-        max_tokens: 300,
+        max_tokens: 800,
         temperature: 0.75
       })
     });

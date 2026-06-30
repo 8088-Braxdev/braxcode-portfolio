@@ -1824,39 +1824,47 @@ Fully negotiable — hourly or project-based. BraxCode believes in fair pricing 
       `;
       scrollToBottom();
 
-      try {
-        const msgs = chats[currentChatId].messages.map(m => ({ role: m.role, content: m.content }));
+  try {
+  const msgs = chats[currentChatId].messages.map(m => ({ role: m.role, content: m.content }));
 
-        const res = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            messages: [
-              { role: 'system', content: buildContext(userProfile.name) },
-              ...msgs
-            ]
-          })
-        });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 25000); // 25s timeout
 
-        const data = await res.json();
-        document.getElementById(typingId)?.remove();
+  const res = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    signal: controller.signal,
+    body: JSON.stringify({
+      messages: [
+        { role: 'system', content: buildContext(userProfile.name) },
+        ...msgs
+      ]
+    })
+  });
 
-        if (data.error) throw new Error(data.error.message);
+  clearTimeout(timeoutId);
 
-        const reply = data.choices[0].message.content;
-        chats[currentChatId].messages.push({ role: 'assistant', content: reply });
-        saveChats();
+  const data = await res.json();
+  document.getElementById(typingId)?.remove();
 
-        inner.innerHTML += buildMsgHTML('assistant', reply);
-        scrollToBottom();
-        hapticFeedback([5]);
+  if (data.error) throw new Error(data.error.message || 'API error');
 
-      } catch (err) {
-        document.getElementById(typingId)?.remove();
-        inner.innerHTML += buildMsgHTML('assistant', 'Connection issue — please check your network and try again. ⚡');
-        scrollToBottom();
-      }
-    }
+  const reply = data.choices[0].message.content;
+  chats[currentChatId].messages.push({ role: 'assistant', content: reply });
+  saveChats();
+
+  inner.innerHTML += buildMsgHTML('assistant', reply);
+  scrollToBottom();
+  hapticFeedback([5]);
+
+} catch (err) {
+  document.getElementById(typingId)?.remove();
+  const msg = err.name === 'AbortError' 
+    ? 'Mtandao ni mbovu kidogo — jaribu tena ukiwa na network nzuri zaidi. ⚡' 
+    : 'Connection issue — please check your network and try again. ⚡';
+  inner.innerHTML += buildMsgHTML('assistant', msg);
+  scrollToBottom();
+}
 
     function quickSend(text) {
       document.getElementById('messageInput').value = text;

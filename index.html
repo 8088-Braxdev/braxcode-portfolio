@@ -1865,6 +1865,21 @@ Fully negotiable — hourly or project-based. BraxCode believes in fair pricing 
   inner.innerHTML += buildMsgHTML('assistant', msg);
   scrollToBottom();
 }
+} catch (err) {
+  document.getElementById(typingId)?.remove();
+  const msg = err.name === 'AbortError' 
+    ? 'Mtandao ni mbovu kidogo — jaribu tena ukiwa na network nzuri zaidi. ⚡' 
+    : 'Connection issue — please check your network and try again. ⚡';
+  inner.innerHTML += buildMsgHTML('assistant', msg);
+  scrollToBottom();
+}
+}  // <-- HII NDIO ILIYOKUWA INAKOSEKANA — inafunga async function sendMessage()
+
+function quickSend(text) {
+  document.getElementById('messageInput').value = text;
+  document.getElementById('sendBtn').classList.add('active');
+  sendMessage();
+}
 
     function quickSend(text) {
       document.getElementById('messageInput').value = text;

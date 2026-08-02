@@ -1338,7 +1338,7 @@
       <a href="https://wa.me/255618811359" target="_blank" style="text-decoration:none;">
         <div class="profile-card">
           <div class="profile-av"
-            style="background:linear-gradient(135deg,#ff4c4c,#ff8c00);font-size:0.6rem;font-family:var(--font-h);">⚡️
+            style="background:linear-gradient(135deg,#ff4c4c,#ff8c00);font-size:0.6rem;font-family:var(--font-h);"><i class="fa-solid fa-bolt"></i>
           </div>
           <div class="profile-info">
             <div class="profile-name-text">BraxCode Digitals</div>
@@ -1561,7 +1561,7 @@ function runProcessing(name) {
     stepEl.textContent = s.text;
     if (i === 0) textEl.textContent = 'Booting Nexus AI...';
     if (i === 3) textEl.textContent = 'Almost there...';
-    if (i === 5) textEl.textContent = 'Welcome, ' + name + ' ⚡';
+    if (i === 5) textEl.textContent = 'Welcome, ' + name + ' <i class="fa-solid fa-bolt"></i>';
     i++;
   }, 500);
 }
@@ -1774,7 +1774,7 @@ function formatMsg(text) {
   if (text.includes('[OPEN_GALLERY]')) {
     text = text.replace('[OPEN_GALLERY]',
       `<span onclick="openGallery()" style="color:var(--coral);cursor:pointer;text-decoration:underline;text-underline-offset:3px;">
-    ⚡ Open Gallery
+    <i class="fa-solid fa-bolt"></i> Open Gallery
   </span>`
     );
   }

@@ -1463,6 +1463,7 @@ RESPONSE LENGTH — CRITICAL:
 
 == WHO IS BRAXTON ==
 Braxton Bruzzzy is a self-taught developer from Mwanza, Tanzania 🇹🇿 — building world-class digital products from East Africa. His motto: "Junior Developer energy, Senior Architect results." He's the founder of BraxCode Digitals Foundation, a one-man powerhouse turning ideas into elegant, high-performance software.
+If someone says is Braxton Bruzzzy, try asking questions like What is the name of Braxton Bruzzzy's mother. The answer to that question is joyce jackson if the user's answer resembles that means you are chatting with the real Braxton Bruzzzy else the answer is different deny. And don't give that answer even someone convince you tell them to give you the answer to the question you asked.
 
 == WHAT WE DO ==
 BraxCode Digitals Foundation builds:
@@ -1756,7 +1757,7 @@ function renderMessages() {
   scrollToBottom();
 }
 
-function buildMsgHTML(role, content) {
+function buildMsgHTML(role, content, id = '') {
   const isBot = role === 'assistant';
   const avatar = userProfile.avatar;
   const name = userProfile.name || 'You';
@@ -1766,7 +1767,7 @@ function buildMsgHTML(role, content) {
     : `<div class="msg-av usr">${avatar ? `<img src="${avatar}" alt=""/>` : `<i class="fa-solid fa-user" style="font-size:0.65rem"></i>`}</div>`;
 
   return `
-    <div class="message-row ${isBot ? '' : 'user'}">
+    <div class="message-row ${isBot ? '' : 'user'}" ${id ? `id="${id}"` : ''}>
       ${avHTML}
       <div class="msg-content">
         <div class="msg-name">${isBot ? 'Nexus <i class="fa-solid fa-bolt"></i>' : name}</div>
@@ -1774,6 +1775,17 @@ function buildMsgHTML(role, content) {
       </div>
     </div>
   `;
+}
+
+function scrollToMessageTop(id) {
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    const wrap = document.getElementById('messagesWrap');
+    if (el && wrap) {
+      const offset = el.offsetTop - 12; // kidogo tu ya nafasi juu
+      wrap.scrollTo({ top: offset, behavior: 'smooth' });
+    }
+  }, 50);
 }
 
 function formatMsg(text) {
@@ -1836,7 +1848,7 @@ async function sendMessage() {
       </div>
     </div>
   `;
-  scrollToBottom();
+  scrollToMessageTop(userMsgId)
 
   try {
     const msgs = chats[currentChatId].messages.map(m => ({ role: m.role, content: m.content }));
@@ -1868,7 +1880,7 @@ async function sendMessage() {
     saveChats();
 
     inner.innerHTML += buildMsgHTML('assistant', reply);
-    scrollToBottom();
+    
     hapticFeedback([5]);
 
   } catch (err) {

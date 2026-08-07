@@ -50,7 +50,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;700&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  
   <link rel="icon" type="image/x-icon" href="BraxCode-Logo.png">
 
   <style>
@@ -69,7 +69,7 @@
       --border2: rgba(255, 76, 76, 0.25);
       --text: #f0f0f0;
       --text2: #999;
-      --text3: #555;
+      --text3: #8a8a8a;
       --user-bg: rgba(255, 76, 76, 0.08);
       --font-h: "Orbitron", sans-serif;
       --font-b: "Rajdhani", sans-serif;
@@ -110,7 +110,7 @@
       z-index: 9999;
       opacity: 0.4;
     }
-
+.icon { width: 1em; height: 1em; fill: currentColor; vertical-align: -0.125em; display: inline-block; }
     /* ===== AMBIENT ORBS ===== */
     .orb {
       position: fixed;
@@ -1303,7 +1303,7 @@
     </div>
 
     <div class="splash-tagline">BraxCode Digitals Foundation</div>
-    <div class="splash-name">BRAXCODE</div>
+    <h1 class="splash-name">BRAXCODE</h1>
     <div class="splash-sub">Software Company</div>
 
     <button class="splash-enter-btn" onclick="enterSite()">
@@ -1333,7 +1333,7 @@
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-top">
       <button class="new-chat-btn" onclick="newChat()">
-        <i class="fa-solid fa-plus"></i>
+      <svg class="icon" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
         New conversation
       </button>
     </div>
@@ -1345,7 +1345,7 @@
       <a href="https://wa.me/255618811359" target="_blank" style="text-decoration:none;">
         <div class="profile-card">
           <div class="profile-av"
-            style="background:linear-gradient(135deg,#ff4c4c,#ff8c00);font-size:0.6rem;font-family:var(--font-h);"><i class="fa-solid fa-bolt"></i>
+            style="background:linear-gradient(135deg,#ff4c4c,#ff8c00);font-size:0.6rem;font-family:var(--font-h);"><svg class="icon" viewBox="0 0 448 512"><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 9-35.3s-16.3-20.7-29.6-20.7H272.5L349.4 44.6z"/></svg>
           </div>
           <div class="profile-info">
             <div class="profile-name-text">BraxCode Digitals</div>
@@ -1363,7 +1363,7 @@
   <main class="main">
     <div class="topbar">
       <button class="hamburger" onclick="toggleSidebar()">
-        <i class="fa-solid fa-bars"></i>
+        <svg class="icon" viewBox="0 0 448 512"><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
       </button>
       <div class="topbar-brand">
         <svg class="topbar-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -1374,8 +1374,9 @@
       </div>
 
       <!-- Top right profile -->
-      <div class="topbar-profile" id="topbarProfile" onclick="toggleDropdown()">
-        <span id="topbarInitial"><i class="fa-solid fa-bolt"></i></span>
+      <div class="topbar-profile" id="topbarProfile" role="button" tabindex="0" aria-label="Open profile menu"
+  aria-haspopup="true" onclick="toggleDropdown()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleDropdown();}">
+        <span id="topbarInitial"><svg class="icon" viewBox="0 0 448 512"><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 9-35.3s-16.3-20.7-29.6-20.7H272.5L349.4 44.6z"/></svg></span>
         <img id="topbarImg" src="" alt=""
           style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;" />
       </div>
@@ -1387,7 +1388,7 @@
           <div class="drop-email" id="dropSub">Nexus AI Interface</div>
         </div>
         <div class="drop-item" onclick="clearHistory()">
-          <i class="fa-solid fa-trash-can"></i> Clear History
+         <svg class="icon" viewBox="0 0 448 512"><path d="M170.5 51.6L151.5 80h145l-19-28.4c-1.5-2.2-4-3.6-6.7-3.6H177.1c-2.7 0-5.2 1.4-6.7 3.6zm147-26.6L354.2 80H368h48 8c13.3 0 24 10.7 24 24s-10.7 24-24 24h-8V432c0 44.2-35.8 80-80 80H112c-44.2 0-80-35.8-80-80V128H24c-13.3 0-24-10.7-24-24S10.7 80 24 80h8H80 93.8l36.7-55.1C140.9 9.4 158.4 0 177.1 0h93.7c18.7 0 36.2 9.4 46.6 24.9zM80 128V432c0 17.7 14.3 32 32 32H336c17.7 0 32-14.3 32-32V128H80zm80 64V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16z"/></svg> Clear History
         </div>
       </div>
     </div>
@@ -1398,14 +1399,15 @@
 
     <div class="input-area">
       <div class="input-wrapper">
-        <textarea id="messageInput" rows="1" placeholder="Ask Nexus anything..." oninput="handleInput(this)"
-          onkeydown="handleKeydown(event)"></textarea>
-        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-          <i class="fa-solid fa-paper-plane"></i>
+    <textarea id="messageInput" rows="1" placeholder="Ask Nexus anything..." aria-label="Message Nexus"
+  oninput="handleInput(this)" onkeydown="handleKeydown(event)"></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()" aria-label="Send message">
+         <svg class="icon" viewBox="0 0 512 512"><path d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480V396.4c0-4 1.5-7.8 4.2-10.7L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z"/></svg>
         </button>
-      </div>
-      <p class="input-hint">© 2026 BraxCode Digitals Foundation <i class="fa-solid fa-bolt"></i> · All rights reserved</p>
-    </div>
+  
+ </div>
+   <p class="input-hint">© 2026 BraxCode Digitals Foundation <svg class="icon" viewBox="0 0 448 512"><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 9-35.3s-16.3-20.7-29.6-20.7H272.5L349.4 44.6z"/></svg> · All rights reserved</p>
+     </div>
   </main>
   <!-- GALLERY PANEL -->
   <div id="galleryPanel" style="
@@ -1680,8 +1682,8 @@ function renderChatList() {
   list.innerHTML = sorted.map(chat => `
     <div class="chat-item ${chat.id === currentChatId ? 'active' : ''}" onclick="switchChat('${chat.id}')">
       <span class="chat-item-text">${chat.title}</span>
-      <button class="chat-delete" onclick="deleteChat('${chat.id}', event)">
-        <i class="fa-solid fa-xmark"></i>
+    <button class="chat-delete" onclick="deleteChat('${chat.id}', event)">
+        <svg class="icon" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
       </button>
     </div>
   `).join('');
@@ -1711,32 +1713,32 @@ function showWelcome() {
       <p>We build AI systems, custom web apps & digital solutions from Mwanza, Tanzania 🇹🇿. Ask Nexus anything about our work — or explore below.</p>
       <div class="suggestions-grid">
         <button class="sug-card" onclick="quickSend('Tell me about BraxCode Digitals Foundation.')">
-          <span class="s-icon"><i class="fa-solid fa-building"></i></span>
+          <span class="s-icon"><svg class="icon" viewBox="0 0 384 512"><path d="M32 0C14.3 0 0 14.3 0 32V480c0 17.7 14.3 32 32 32H160V416c0-17.7 14.3-32 32-32s32 14.3 32 32v96H352c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H32zM64 240c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V240zm128-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H192c-8.8 0-16-7.2-16-16V240c0-8.8 7.2-16 16-16zm96 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H304c-8.8 0-16-7.2-16-16V240zM80 96h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16zm96 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H192c-8.8 0-16-7.2-16-16V112zm112-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H304c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16z"/></svg></span>
           <div class="s-title">About Us</div>
           <div class="s-sub">Mission & Vision</div>
         </button>
         <button class="sug-card" onclick="quickSend('What services does BraxCode Digitals Foundation provide?')">
-          <span class="s-icon"><i class="fa-solid fa-gears"></i></span>
+          <span class="s-icon"><svg class="icon" viewBox="0 0 640 512"><path d="M308.5 135.3c7.1-6.3 9.9-16.2 6.2-25c-2.3-5.3-4.8-10.5-7.6-15.5L304 89.4c-3-5-6.3-9.9-9.8-14.6c-5.7-7.6-15.7-10.1-24.7-7.1l-28.2 9.3c-10.7-8.8-23-16-36.2-20.9L199 27.1c-1.9-9.3-9.1-16.7-18.5-17.8C173.9 8.4 167.2 8 160.4 8h-.7c-6.8 0-13.5 .4-20.1 1.2c-9.4 1.1-16.6 8.6-18.5 17.8L115.1 56c-13.3 5-25.5 12.1-36.2 20.9L50.7 67.6c-9-3-19-.5-24.7 7.1c-3.5 4.7-6.8 9.6-9.8 14.6l-3 5.4c-2.8 5-5.3 10.2-7.6 15.5c-3.7 8.7-.9 18.6 6.2 25l22.2 19.8C33.1 161.9 32 168.8 32 176s1.1 14.1 3.1 20.6L12.9 216.4c-7.1 6.3-9.9 16.2-6.2 25c2.3 5.3 4.8 10.4 7.6 15.5l3 5.4c3 5 6.3 9.9 9.8 14.6c5.7 7.6 15.7 10.1 24.7 7.1l28.2-9.3c10.7 8.8 23 16 36.2 20.9l6.8 28.9c1.9 9.3 9.1 16.7 18.5 17.8c6.7 .8 13.4 1.2 20.2 1.2s13.5-.4 20.1-1.2c9.4-1.1 16.6-8.6 18.5-17.8l6.8-28.9c13.3-5 25.5-12.1 36.2-20.9l28.2 9.3c9 3 19 .5 24.7-7.1c3.5-4.7 6.8-9.6 9.8-14.6l3-5.4c2.8-5 5.3-10.2 7.6-15.5c3.7-8.7 .9-18.6-6.2-25l-22.2-19.8c2-6.5 3.1-13.4 3.1-20.6s-1.1-14.1-3.1-20.6l22.2-19.8zM160 224a48 48 0 1 1 0-96 48 48 0 1 1 0 96zM616.2 425.9L586.4 406c2-6.5 3.1-13.4 3.1-20.6s-1.1-14.1-3.1-20.6l29.8-19.9c7.1-6.3 9.9-16.2 6.2-25c-2.3-5.3-4.8-10.4-7.6-15.5l-3-5.4c-3-5-6.3-9.9-9.8-14.6c-5.7-7.6-15.7-10.1-24.7-7.1l-33.4 11c-10.4-8.4-22.3-15.2-35.1-19.9l-8-34.3c-1.9-9.3-9.1-16.7-18.5-17.8c-6.7-.8-13.4-1.2-20.2-1.2s-13.5 .4-20.1 1.2c-9.4 1.1-16.6 8.6-18.5 17.8l-8 34.2c-12.9 4.7-24.7 11.5-35.1 19.9l-33.4-11c-9-3-19-.5-24.7 7.1c-3.5 4.7-6.8 9.6-9.8 14.6l-3 5.4c-2.8 5-5.3 10.2-7.6 15.5c-3.7 8.7-.9 18.6 6.2 25l29.8 19.9c-2 6.5-3.1 13.4-3.1 20.6s1.1 14.1 3.1 20.6l-29.8 19.9c-7.1 6.3-9.9 16.2-6.2 25c2.3 5.3 4.8 10.4 7.6 15.5l3 5.4c3 5 6.3 9.9 9.8 14.6c5.7 7.6 15.7 10.1 24.7 7.1l33.4-11c10.4 8.4 22.3 15.2 35.1 19.9l8 34.2c1.9 9.3 9.1 16.7 18.5 17.8c6.7 .8 13.4 1.2 20.2 1.2s13.5-.4 20.1-1.2c9.4-1.1 16.6-8.6 18.5-17.8l8-34.2c12.9-4.7 24.7-11.5 35.1-19.9l33.4 11c9 3 19 .5 24.7-7.1c3.5-4.7 6.8-9.6 9.8-14.6l3-5.4c2.8-5 5.3-10.2 7.6-15.5c3.7-8.7 .9-18.6-6.2-25zM480 432a48 48 0 1 1 0-96 48 48 0 1 1 0 96z"/></svg></span>
           <div class="s-title">Services</div>
           <div class="s-sub">What we build</div>
         </button>
         <button class="sug-card" onclick="quickSend('Show me the latest projects by BraxCode Digitals.')">
-          <span class="s-icon"><i class="fa-solid fa-rocket"></i></span>
+          <span class="s-icon"><svg class="icon" viewBox="0 0 512 512"><path d="M156.6 384.9L125.7 353.9c-8.7-8.7-11.7-21.5-7.4-33.1c8.7-23.5 23.4-53.5 45.2-83.7C214.7 172.7 274.7 132.9 337 132.9c8.4 0 15.5 6.1 16.8 14.4c8.9 57.4-14.5 121.9-70.9 175.5c-31.3 29.7-63.4 47.2-88.4 57.5c-11.6 4.3-24.4 1.3-33.1-7.4zM432 208c0-44.2-35.8-80-80-80s-80 35.8-80 80s35.8 80 80 80s80-35.8 80-80zm-24-56c8.8 0 16 7.2 16 16s-7.2 16-16 16H352c-8.8 0-16-7.2-16-16s7.2-16 16-16h56zM33.3 466.6c-8.8-3.5-14.7-11.7-15.3-21.1c-.5-6.9-.7-13.9-.7-20.9c0-58.3 22.6-114.4 62.5-155.6c-6.6-4.1-14.6-6.9-24-8.5c-11.1-1.8-22.4-.4-32.4 4.6C10.7 271.1 0 288.1 0 306.9v101c0 7.3 4 14.1 10.5 17.6l112 60.6c6.6 3.6 14.6 3.5 21.1-.3c22.5-13 47.9-33.8 64-59.4c-32.3 11.4-68.9 8.2-100.6-8.9c-24.7-13.3-42.6-33.9-52.4-56.9-1-2.4-1.9-4.9-2.6-7.4c-3.8-13.3-.7-27.6 8.3-38.2c9-10.6 22.6-16 36.4-14.4c8.1 .9 15.6 4.3 21.7 9.7c-16.7 30.9-27.4 65-30.1 100.9z"/></svg></span>
           <div class="s-title">Projects</div>
           <div class="s-sub">Our work</div>
         </button>
         <button class="sug-card" onclick="quickSend('What are BraxCode Digitals main technical skills?')">
-          <span class="s-icon"><i class="fa-solid fa-bolt"></i></span>
+          <span class="s-icon"><svg class="icon" viewBox="0 0 448 512"><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 9-35.3s-16.3-20.7-29.6-20.7H272.5L349.4 44.6z"/></svg></span>
           <div class="s-title">Skills</div>
           <div class="s-sub">Tech stack</div>
         </button>
         <button class="sug-card" onclick="quickSend('I would like to see the BraxCode company profile and CV.')">
-          <span class="s-icon"><i class="fa-solid fa-file-lines"></i></span>
+          <span class="s-icon"><svg class="icon" viewBox="0 0 384 512"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg></span>
           <div class="s-title">Company Profile</div>
           <div class="s-sub">Full CV</div>
         </button>
         <button class="sug-card" onclick="quickSend('How can I contact BraxCode Digitals Foundation?')">
-          <span class="s-icon"><i class="fa-solid fa-envelope"></i></span>
+          <span class="s-icon"><svg class="icon" viewBox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg></span>
           <div class="s-title">Contact</div>
           <div class="s-sub">Get in touch</div>
         </button>
@@ -1764,13 +1766,12 @@ function buildMsgHTML(role, content, id = '') {
 
   const avHTML = isBot
     ? `<div class="msg-av bot">${LOGO_SVG}</div>`
-    : `<div class="msg-av usr">${avatar ? `<img src="${avatar}" alt=""/>` : `<i class="fa-solid fa-user" style="font-size:0.65rem"></i>`}</div>`;
-
+    : `<div class="msg-av usr">${avatar ? `<img src="${avatar}" alt=""/>` : `<svg class="icon" style="font-size:0.65rem" viewBox="0 0 448 512"><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/></svg>`}</div>`;
   return `
     <div class="message-row ${isBot ? '' : 'user'}" ${id ? `id="${id}"` : ''}>
       ${avHTML}
       <div class="msg-content">
-        <div class="msg-name">${isBot ? 'Nexus <i class="fa-solid fa-bolt"></i>' : name}</div>
+     <div class="msg-name">${isBot ? 'Nexus <svg class="icon" viewBox="0 0 448 512"><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 9-35.3s-16.3-20.7-29.6-20.7H272.5L349.4 44.6z"/></svg>' : name}</div>
         <div class="msg-bubble ${isBot ? 'bot' : 'usr'}">${formatMsg(content)}</div>
       </div>
     </div>
@@ -1798,8 +1799,8 @@ function formatMsg(text) {
   // Gallery trigger
   if (text.includes('[OPEN_GALLERY]')) {
     text = text.replace('[OPEN_GALLERY]',
-      `<span onclick="openGallery()" style="color:var(--coral);cursor:pointer;text-decoration:underline;text-underline-offset:3px;">
-    <i class="fa-solid fa-bolt"></i> Open Gallery
+     `<span onclick="openGallery()" style="color:var(--coral);cursor:pointer;text-decoration:underline;text-underline-offset:3px;">
+    <svg class="icon" viewBox="0 0 448 512"><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 9-35.3s-16.3-20.7-29.6-20.7H272.5L349.4 44.6z"/></svg> Open Gallery
   </span>`
     );
   }
@@ -1838,7 +1839,7 @@ async function sendMessage() {
   document.getElementById('sendBtn').classList.remove('active');
 
   const inner = document.getElementById('messagesInner');
-
+if (inner.querySelector('.welcome')) inner.innerHTML = '';
   // id ya ujumbe wa mtumiaji wa sasa — hii ndio anchor ya scroll
   const userMsgId = 'msg_' + Date.now();
   inner.innerHTML += buildMsgHTML('user', text, userMsgId);
@@ -1848,7 +1849,7 @@ async function sendMessage() {
     <div class="message-row" id="${typingId}">
       <div class="msg-av bot">${LOGO_SVG}</div>
       <div class="msg-content">
-        <div class="msg-name">Nexus <i class="fa-solid fa-bolt"></i></div>
+    <div class="msg-name">Nexus <svg class="icon" viewBox="0 0 448 512"><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 9-35.3s-16.3-20.7-29.6-20.7H272.5L349.4 44.6z"/></svg></div>
         <div class="typing-indicator">
           <div class="typing-dot"></div>
           <div class="typing-dot"></div>
@@ -1897,8 +1898,8 @@ async function sendMessage() {
   } catch (err) {
     document.getElementById(typingId)?.remove();
     const msg = err.name === 'AbortError'
-      ? 'Mtandao ni mbovu kidogo — jaribu tena ukiwa na network nzuri zaidi. <i class="fa-solid fa-bolt"></i>'
-      : 'Connection issue — please check your network and try again. <i class="fa-solid fa-bolt"></i>';
+      ? 'Mtandao ni mbovu kidogo — jaribu tena ukiwa na network nzuri zaidi. <svg class="icon" viewBox="0 0 448 512"><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 9-35.3s-16.3-20.7-29.6-20.7H272.5L349.4 44.6z"/></svg>'
+      : 'Connection issue — please check your network and try again. <svg class="icon" viewBox="0 0 448 512"><path d="M349.4 44.6c5.9-13.7 1.5-29.7-10.6-38.5s-28.6-8-39.9 1.8l-256 224c-10 8.8-13.6 22.9-9 35.3S50.7 288 64 288H175.5L98.6 467.4c-5.9 13.7-1.5 29.7 10.6 38.5s28.6 8 39.9-1.8l256-224c10-8.8 13.6-22.9 9-35.3s-16.3-20.7-29.6-20.7H272.5L349.4 44.6z"/></svg>';
     inner.innerHTML += buildMsgHTML('assistant', msg);
     // Hitilafu ikitokea, hii ni ujumbe mfupi hivyo hakuna madhara
     // kuubakisha karibu na ujumbe wa mtumiaji.

@@ -47,6 +47,8 @@
   }
 }
 </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;700&display=swap"
     rel="stylesheet" />
@@ -953,6 +955,8 @@
     .sug-card .s-sub {
       font-size: 0.7rem;
       color: var(--text3);
+      min-height: 1.4em;
+      line-height: 1.4;
     }
 
     /* MESSAGES */
@@ -1428,7 +1432,7 @@
 
   <div class="input-area">
       <div class="quick-bar" id="quickBar">
-        <button class="quick-pill" onclick="quickSend('Tell me about BraxCode Digitals Foundation.')">About Us</button>
+  <button class="quick-pill" onclick="showMission()">About Us</button>
         <button class="quick-pill" onclick="quickSend('What services does BraxCode Digitals Foundation provide?')">Services</button>
         <button class="quick-pill" onclick="quickSend('Show me the latest projects by BraxCode Digitals.')">Projects</button>
         <button class="quick-pill" onclick="quickSend('What are BraxCode Digitals main technical skills?')">Skills</button>
@@ -1461,8 +1465,33 @@
         style="background:none;border:1px solid var(--border);color:var(--text2);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:var(--font-b);font-size:0.8rem;">✕
         Close</button>
     </div>
-    <iframe id="galleryFrame" src="" style="flex:1;border:none;width:100%;height:100%;" loading="lazy">
+ <iframe id="galleryFrame" src="" style="flex:1;border:none;width:100%;height:100%;" loading="lazy">
     </iframe>
+  </div>
+
+  <!-- MISSION & VISION PANEL -->
+  <div id="missionPanel" style="
+  position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,0.92);
+  backdrop-filter:blur(12px);
+  display:none;flex-direction:column;
+">
+    <div
+      style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--bg2);">
+      <span style="font-family:var(--font-h);font-size:0.75rem;letter-spacing:3px;color:var(--coral);">ABOUT BRAXCODE</span>
+      <button onclick="closeMission()"
+        style="background:none;border:1px solid var(--border);color:var(--text2);padding:6px 14px;border-radius:8px;cursor:pointer;font-family:var(--font-b);font-size:0.8rem;">✕
+        Close</button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:48px 24px;">
+      <div style="max-width:640px;margin:0 auto;color:var(--text);font-family:var(--font-b);line-height:1.8;">
+        <h2 style="font-family:var(--font-h);color:var(--coral);font-size:1.1rem;letter-spacing:1px;margin-bottom:14px;">Our Mission</h2>
+        <p style="margin-bottom:32px;color:var(--text2);">BraxCode Digitals Foundation builds elegant, high-performance software from Mwanza, Tanzania — proving that world-class digital products can come from anywhere. We turn ideas into custom AI systems, full-stack web apps, and futuristic digital experiences for clients across the globe.</p>
+        <h2 style="font-family:var(--font-h);color:var(--coral);font-size:1.1rem;letter-spacing:1px;margin-bottom:14px;">Our Vision</h2>
+        <p style="margin-bottom:32px;color:var(--text2);">To be a leading digital transformation partner for businesses in East Africa and beyond — one where "Junior Developer energy, Senior Architect results" isn't just a motto, it's the standard every project ships with.</p>
+        <button class="quick-pill" onclick="closeMission(); quickSend('Tell me more about BraxCode.')" style="padding:10px 20px;font-size:0.85rem;">Ask Nexus more →</button>
+      </div>
+    </div>
   </div>
 <script>
   // ================================================
@@ -1679,8 +1708,23 @@ function newChat() {
   saveChats();
   currentChatId = id;
   renderChatList();
-  showWelcome(); // badilisha renderMessages() → showWelcome()
+  showEmptyChat();
   if (window.innerWidth <= 768) toggleSidebar();
+}
+
+function showEmptyChat() {
+  toggleQuickBar(true);
+  document.getElementById('messagesInner').innerHTML = `
+    <div class="welcome" style="min-height:40vh;">
+      <svg class="welcome-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="5"/>
+        <circle cx="100" cy="100" r="72" fill="none" stroke="#ff4c4c" stroke-width="2" stroke-dasharray="6 4" opacity="0.4"/>
+        <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/>
+      </svg>
+      <h1>New conversation</h1>
+      <p>Ask Nexus anything to get started ⚡</p>
+    </div>
+  `;
 }
 
 function switchChat(id) {
@@ -1754,7 +1798,7 @@ function showWelcome() {
       <h1>Welcome to <span>BraxCode </span>Digitals Foundation</h1>
       <p>We build AI systems, custom web apps & digital solutions from Mwanza, Tanzania 🇹🇿. Ask Nexus anything about our work — or explore below.</p>
       <div class="suggestions-grid">
-        <button class="sug-card" onclick="quickSend('Tell me about BraxCode Digitals Foundation.')">
+ <button class="sug-card" onclick="showMission()">
           <span class="s-icon"><svg class="icon" viewBox="0 0 384 512"><path d="M32 0C14.3 0 0 14.3 0 32V480c0 17.7 14.3 32 32 32H160V416c0-17.7 14.3-32 32-32s32 14.3 32 32v96H352c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H32zM64 240c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V240zm128-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H192c-8.8 0-16-7.2-16-16V240c0-8.8 7.2-16 16-16zm96 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H304c-8.8 0-16-7.2-16-16V240zM80 96h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16zm96 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H192c-8.8 0-16-7.2-16-16V112zm112-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H304c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16z"/></svg></span>
           <div class="s-title">About Us</div>
           <div class="s-sub">Mission & Vision</div>
@@ -1990,10 +2034,18 @@ function openGallery() {
     frame.src = 'gallery.html';
   }
 }
-
 function closeGallery() {
   document.getElementById('galleryPanel').style.display = 'none';
 }
+
+function showMission() {
+  document.getElementById('missionPanel').style.display = 'flex';
+}
+
+function closeMission() {
+  document.getElementById('missionPanel').style.display = 'none';
+}
+
 loadChats();
 
   </script>

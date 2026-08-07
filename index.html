@@ -111,6 +111,35 @@
       opacity: 0.4;
     }
 .icon { width: 1em; height: 1em; fill: currentColor; vertical-align: -0.125em; display: inline-block; }
+.quick-bar {
+  display: none;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 0 10px;
+  max-width: 740px;
+  margin: 0 auto;
+}
+.quick-bar.show { display: flex; }
+.quick-bar::-webkit-scrollbar { height: 3px; }
+.quick-bar::-webkit-scrollbar-thumb { background: var(--border); }
+.quick-pill {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-family: var(--font-b);
+  color: var(--text2);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.quick-pill:hover {
+  background: var(--coral-dim);
+  border-color: var(--border2);
+  color: var(--text);
+}
     /* ===== AMBIENT ORBS ===== */
     .orb {
       position: fixed;
@@ -1397,7 +1426,15 @@
       <div class="messages-inner" id="messagesInner"></div>
     </div>
 
-    <div class="input-area">
+  <div class="input-area">
+      <div class="quick-bar" id="quickBar">
+        <button class="quick-pill" onclick="quickSend('Tell me about BraxCode Digitals Foundation.')">About Us</button>
+        <button class="quick-pill" onclick="quickSend('What services does BraxCode Digitals Foundation provide?')">Services</button>
+        <button class="quick-pill" onclick="quickSend('Show me the latest projects by BraxCode Digitals.')">Projects</button>
+        <button class="quick-pill" onclick="quickSend('What are BraxCode Digitals main technical skills?')">Skills</button>
+        <button class="quick-pill" onclick="quickSend('I would like to see the BraxCode company profile and CV.')">Company Profile</button>
+        <button class="quick-pill" onclick="quickSend('How can I contact BraxCode Digitals Foundation?')">Contact</button>
+      </div>
       <div class="input-wrapper">
     <textarea id="messageInput" rows="1" placeholder="Ask Nexus anything..." aria-label="Message Nexus"
   oninput="handleInput(this)" onkeydown="handleKeydown(event)"></textarea>
@@ -1591,6 +1628,10 @@ document.addEventListener('click', function (e) {
   }
 });
 
+function toggleQuickBar(show) {
+  const bar = document.getElementById('quickBar');
+  if (bar) bar.classList.toggle('show', show);
+}
 
 function clearHistory() {
   if (confirm('Clear all chat history?')) {
@@ -1701,6 +1742,7 @@ const LOGO_SVG = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" 
 // WELCOME SCREEN
 // ================================================
 function showWelcome() {
+  toggleQuickBar(false);
   const name = userProfile.name ? `, ${userProfile.name}` : '';
   document.getElementById('messagesInner').innerHTML = `
     <div class="welcome">
@@ -1755,6 +1797,7 @@ function renderMessages() {
   if (!currentChatId || !chats[currentChatId] || chats[currentChatId].messages.length === 0) {
     showWelcome(); return;
   }
+  toggleQuickBar(true);
   inner.innerHTML = chats[currentChatId].messages.map(m => buildMsgHTML(m.role, m.content)).join('');
   scrollToBottom();
 }
@@ -1839,7 +1882,8 @@ async function sendMessage() {
   document.getElementById('sendBtn').classList.remove('active');
 
   const inner = document.getElementById('messagesInner');
-if (inner.querySelector('.welcome')) inner.innerHTML = '';
+  if (inner.querySelector('.welcome')) inner.innerHTML = '';
+  toggleQuickBar(true);
   // id ya ujumbe wa mtumiaji wa sasa — hii ndio anchor ya scroll
   const userMsgId = 'msg_' + Date.now();
   inner.innerHTML += buildMsgHTML('user', text, userMsgId);

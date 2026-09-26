@@ -1525,7 +1525,7 @@ function runProcessing(name) {
     { text: 'Preparing your experience...', pct: 55 },
     { text: 'Almost ready...', pct: 75 },
     { text: 'Establishing connection...', pct: 90 },
-    { text: 'Welcome to BraxCode ⚡️', pct: 100 },
+    { text: 'Welcome to BraxCode ', pct: 100 },
   ];
 
   const bar = document.getElementById('procBar');
@@ -1549,7 +1549,7 @@ function runProcessing(name) {
     stepEl.textContent = s.text;
     if (i === 0) textEl.textContent = 'Booting Nexus AI...';
     if (i === 3) textEl.textContent = 'Almost there...';
-    if (i === 5) textEl.textContent = 'Welcome, ' + name + '⚡️';
+    if (i === 5) textEl.textContent = 'Welcome, ' + name + '';
     i++;
   }, 500);
 }
@@ -1634,7 +1634,7 @@ function showEmptyChat() {
         <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/>
       </svg>
       <h1>New conversation</h1>
-      <p>Ask Nexus anything to get started ⚡</p>
+      <p>Ask Nexus anything to get started.</p>
     </div>
   `;
 }

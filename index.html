@@ -1201,15 +1201,31 @@
       transform: scale(1.05);
     }
 
-    .input-hint {
-      text-align: center;
-      font-size: 0.62rem;
-      color: var(--text3);
-      margin-top: 8px;
-      font-family: var(--font-c);
-      letter-spacing: 1px;
-    }
+.input-hint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  font-size: 0.62rem;
+  color: var(--text3);
+  margin-top: 8px;
+  font-family: var(--font-c);
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+}
 
+.input-hint a {
+  color: var(--text3);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.input-hint a:hover {
+  border-bottom-color: var(--text3);
+}
     /* ============================
          SIDEBAR OVERLAY
       ============================*/
@@ -1454,7 +1470,13 @@
         </button>
   
  </div>
-   <p class="input-hint">© 2026 BraxCode Digitals Foundation · <a href="privacy.html" style="color:var(--text3);">Privacy</a> · <a href="terms.html" style="color:var(--text3);">Terms</a></p>
+  <p class="input-hint">
+  <span>© 2026 BraxCode Digitals Foundation</span>
+  <span>·</span>
+  <a href="privacy.html">Privacy</a>
+  <span>·</span>
+  <a href="terms.html">Terms</a>
+</p>
      </div>
   </main>
   <!-- GALLERY PANEL -->

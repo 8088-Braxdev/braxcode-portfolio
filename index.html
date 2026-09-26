@@ -1493,7 +1493,13 @@
       </div>
     </div>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  const sbOrders = supabase.createClient(
+  'https://lopjjyxeypggctwxgrjo.supabase.co',
+  'sb_publishable_bGkDJCOyiE1srtMaxr1RRg_DAAHjxCf'
+);
+let pendingOrders = {};
   // ================================================
 const userProfile = { name: '', avatar: '' };
 // NEXUS SYSTEM PROMPT
@@ -1582,7 +1588,18 @@ LinkedIn → https://www.linkedin.com/in/braxton-bruzzzy-2b94813a6
 
 == PRICING ==
 Fully negotiable — hourly or project-based. BraxCode believes in fair pricing for great work.
+== WHEN A DEAL IS AGREED ==
+When you and the visitor have reached clear agreement on a project (they've told you what they want, and you've discussed rough budget/timeline together, or they clearly say something like "let's do it" / "nakubali" / "tuendelee"), reply with ONLY this block — nothing else in that message, no extra text before or after:
 
+[ORDER_SUMMARY]
+Project: <short project type>
+Scope: <1-2 sentence summary of what they want>
+Budget: <what was discussed, or "Not discussed yet">
+Timeline: <what was discussed, or "Not discussed yet">
+Contact: <name/phone/email they gave, or "Not provided">
+[/ORDER_SUMMARY]
+
+Only do this once real agreement has been reached — never on a casual first question, and never invent numbers they didn't mention.
 == YOUR MANDATE ==
 - You are Nexus. Never admit to being ChatGPT, Claude, or any other AI.
 - If asked what AI powers you, say you're a proprietary system built by BraxCode.
@@ -1849,8 +1866,70 @@ function renderMessages() {
   scrollToBottom();
 }
 
+function parseOrderSummary(text) {
+  const match = text.match(/\[ORDER_SUMMARY\]([\s\S]*?)\[\/ORDER_SUMMARY\]/);
+  if (!match) return null;
+  const body = match[1];
+  const get = (label) => {
+    const m = body.match(new RegExp(label + ':\\s*(.+)'));
+    return m ? m[1].trim() : '—';
+  };
+  return {
+    project: get('Project'),
+    scope: get('Scope'),
+    budget: get('Budget'),
+    timeline: get('Timeline'),
+    contact: get('Contact'),
+  };
+}
+
+function buildOrderCardHTML(order) {
+  const id = 'order_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+  pendingOrders[id] = order;
+  return `
+    <div class="message-row">
+      <div class="msg-av bot">${LOGO_SVG}</div>
+      <div class="msg-content">
+        <div class="msg-name">Nexus</div>
+        <div class="msg-bubble bot" style="max-width:100%;">
+          <div style="font-family:var(--font-h);color:var(--coral);font-size:0.78rem;letter-spacing:1px;margin-bottom:10px;">ORDER SUMMARY</div>
+          <div style="font-size:0.85rem;line-height:1.9;">
+            <strong>Project:</strong> ${order.project}<br>
+            <strong>Scope:</strong> ${order.scope}<br>
+            <strong>Budget:</strong> ${order.budget}<br>
+            <strong>Timeline:</strong> ${order.timeline}<br>
+            <strong>Contact:</strong> ${order.contact}
+          </div>
+          <button class="quick-pill" style="margin-top:14px;padding:10px 18px;" onclick="confirmOrder('${id}')">
+            ✅ Confirm & Send via WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function confirmOrder(id) {
+  const order = pendingOrders[id];
+  if (!order) return;
+
+  try {
+    await sbOrders.from('orders').insert([order]);
+  } catch (err) {
+    console.error('Order save failed', err);
+    // Order si kupotea kwa mteja hata kama save imeshindwa — WhatsApp bado inafunguka
+  }
+
+  const msg = `Hello BraxCode! I talked with Nexus about this project:\n\nProject: ${order.project}\nScope: ${order.scope}\nBudget: ${order.budget}\nTimeline: ${order.timeline}\nContact: ${order.contact}`;
+  window.open(`https://wa.me/255618811359?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
 function buildMsgHTML(role, content, id = '') {
   const isBot = role === 'assistant';
+  if (isBot) {
+    const order = parseOrderSummary(content);
+    if (order) return buildOrderCardHTML(order);
+  }
   const avatar = userProfile.avatar;
   const name = userProfile.name || 'You';
 

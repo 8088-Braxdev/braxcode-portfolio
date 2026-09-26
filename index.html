@@ -704,25 +704,29 @@
       padding: 4px;
     }
 
-    .topbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex: 1;
-    }
-
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
     .topbar-logo {
       width: 26px;
       height: 26px;
       filter: drop-shadow(0 0 6px var(--coral-glow));
     }
 
-    .topbar-title {
-      font-family: var(--font-h);
-      font-size: 0.72rem;
-      letter-spacing: 2px;
-      color: var(--text2);
-    }
+.topbar-title {
+  font-family: var(--font-h);
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  color: var(--text2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
 
     .topbar-title span {
       color: var(--coral);
@@ -1249,7 +1253,9 @@
         bottom: 0;
         transform: translateX(-100%);
       }
-
+.topbar-title .title-extra {
+  display: none;
+}
       .sidebar.open {
         transform: translateX(0);
       }
@@ -1426,7 +1432,7 @@
           <circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="7" />
           <path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c" />
         </svg>
-        <span class="topbar-title"><span>BraxCode</span> Digitals Foundation</span>
+   <span class="topbar-title"><span>BraxCode</span><span class="title-extra"> Digitals Foundation</span></span>
       </div>
 
       <!-- Top right profile -->

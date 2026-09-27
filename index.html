@@ -1678,6 +1678,7 @@ function switchChat(id) {
   currentChatId = id;
   renderChatList();
   renderMessages();
+   if (window.innerWidth <= 768) toggleSidebar(); 
 }
 
 function deleteChat(id, e) {

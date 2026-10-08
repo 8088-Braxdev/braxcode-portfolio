@@ -4,7 +4,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BraxCode Digitals — Project Gallery </title>
+<title>Project Gallery — BraxCode Digitals Foundation</title>
+<meta name="description" content="Projects built by BraxCode Digitals Foundation in Mwanza, Tanzania: AI tools, web apps, games and utilities. Browse the live demos." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://braxcode.com/gallery.html" />
+<meta property="og:title" content="Project Gallery — BraxCode Digitals Foundation" />
+<meta property="og:description" content="AI tools, web apps, games and utilities built in Mwanza, Tanzania." />
+<meta property="og:url" content="https://braxcode.com/gallery.html" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://braxcode.com/BraxCode-Logo.png" />
   <link
     href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;700&display=swap"
     rel="stylesheet" />
@@ -122,7 +130,7 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      min-with: 0;
+      min-width: 0;
       background: rgba(5, 5, 7, 0.8);
       backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
@@ -1056,7 +1064,7 @@
 
   <!-- NAV -->
   <nav>
-    <a class="nav-logo" href="index.html">
+    <a class="nav-logo" href="/">
       <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
         <circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="5" />
         <path d="M25 55 L14 46 L6 46" stroke="#ff4c4c" stroke-width="2.5" stroke-linecap="round" fill="none" />
@@ -1162,6 +1170,7 @@
     <div class="footer-links">
       <a class="footer-link" href="https://wa.me/255618811359" target="_blank">WhatsApp</a>
       <a class="footer-link" href="https://github.com/8088-Braxdev" target="_blank">GitHub</a>
+      <a class="footer-link" href="https://devshowcase.braxcode.com">DevShowcase</a>
     </div>
   </footer>
 
@@ -1184,23 +1193,12 @@
         allProjects = data || [];
         document.getElementById('statCount').textContent = allProjects.length;
         renderGrid(allProjects);
-      } catch (err) {
-        SUPABASE_URL === 'YOUR_SUPABASE_URL' ? loadDemo() : showError();
-      }
+   } catch (err) {
+  showError();
+}
     }
 
-    function loadDemo() {
-      allProjects = [
-        { id: 1, title: 'BraxBank Tracker', description: 'AI-powered savings tracker with financial advice engine. Multi-account support, real-time insights and smart goal tracking — linked with BraxPay.', image_url: '', live_url: 'https://braxbank.netlify.app', github_url: '', tags: ['AI', 'Web', 'Finance'], features: ['AI financial advisor', 'Up to 10 accounts', 'Deposit & withdrawal anytime', 'BraxPay integration', 'Mobile responsive'], created_at: '2026-01-15' },
-        { id: 2, title: 'BraxNexus AI', description: 'Humanoid AI assistant for multitasking. All-in-one: music, video, image generation, app and website building on a single futuristic platform.', image_url: '', live_url: 'https://graceful-sprite-c1638e.netlify.app/', github_url: '', tags: ['AI', 'Web'], features: ['Music & video streaming', 'Image generation', 'App/website builder', 'Futuristic UI', 'Simple to use'], created_at: '2026-02-10' },
-        { id: 3, title: 'BraxQuest Game', description: 'Intelligence quest game with multiple selectable difficulty levels. Engineered for sharp minds seeking digital challenges.', image_url: '', live_url: 'https://boisterous-semolina-631quest.netlify.app/', github_url: '', tags: ['Game', 'Web'], features: ['Multiple difficulty levels', 'Quest-based gameplay', 'Clean UI', 'Mobile friendly'], created_at: '2026-01-28' },
-        { id: 4, title: 'BraxChef', description: 'Personal AI culinary assistant with a clean animated interface. Discover recipes, cooking tips, and personalized meal plans.', image_url: '', live_url: 'https://poetic-marzipan-03e488.netlify.app/', github_url: '', tags: ['AI', 'Web'], features: ['AI recipe generation', 'Clean animated UI', 'Personalized suggestions', 'Mobile optimized'], created_at: '2026-02-20' },
-        { id: 5, title: 'Brax QR Generator', description: 'Text-to-QR code generator with instant download. Fast, clean, and minimal — perfect for business use.', image_url: '', live_url: 'https://8088-braxdev.github.io/Qr-gen/', github_url: 'https://github.com/8088-Braxdev', tags: ['Tool', 'Web'], features: ['Instant QR generation', 'Easy one-click download', 'Clean minimal UI', 'No signup required'], created_at: '2026-01-05' },
-        { id: 6, title: 'DevShowcase', description: 'Global developer portfolio platform connecting developers with clients via WhatsApp. Africa-first, powered by Supabase and Groq AI.', image_url: '', live_url: '', github_url: '', tags: ['AI', 'Web'], features: ['Global developer profiles', 'WhatsApp client contact', 'AI help feature', 'Supabase backend', 'Featured listings'], created_at: '2026-03-01' }
-      ];
-      document.getElementById('statCount').textContent = allProjects.length;
-      renderGrid(allProjects);
-    }
+
 
     function showError() {
       document.getElementById('galleryGrid').innerHTML = `<div class="gallery-status"><svg class="status-logo" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="5"/><path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/></svg><div class="status-title">Connection Error</div><div class="status-sub">Could not reach database. Check your connection.</div></div>`;

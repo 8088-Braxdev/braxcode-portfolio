@@ -76,7 +76,7 @@ a:hover {
 
 .wrap {
   width: 100%;
-  max-width: 1120px;
+  max-width: 1320px;
   margin: 0 auto;
   padding: 0 20px;
 }
@@ -141,6 +141,12 @@ a:hover {
 .brand-logo {
   flex: 0 0 auto;
   filter: drop-shadow(0 0 10px var(--coral-glow));
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.3, 1), filter 0.4s ease;
+}
+
+.brand:hover .brand-logo {
+  transform: rotate(-8deg) scale(1.07);
+  filter: drop-shadow(0 0 18px var(--coral-glow));
 }
 
 .brand-text {
@@ -163,6 +169,7 @@ a:hover {
 }
 
 .nav-toggle {
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -180,6 +187,14 @@ a:hover {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.nav-toggle:hover {
+  border-color: var(--border2);
+}
+
+.nav-toggle:active {
+  transform: scale(0.94);
 }
 
 .nav-toggle-bars span {
@@ -236,9 +251,6 @@ a:hover {
   text-decoration: none;
 }
 
-.site-nav .btn {
-  margin-top: 10px;
-}
 
 /* ===== BUTTONS ===== */
 .btn {
@@ -273,6 +285,7 @@ a:hover {
 .btn-primary:hover {
   background: var(--coral2);
   box-shadow: 0 8px 28px rgba(255, 76, 76, 0.28);
+  transform: translateY(-2px);
 }
 
 .btn-ghost {
@@ -284,6 +297,11 @@ a:hover {
 .btn-ghost:hover {
   background: var(--glass2);
   border-color: var(--border2);
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
 }
 
 .btn-sm {
@@ -299,6 +317,18 @@ a:hover {
   font-size: 1rem;
   font-weight: 600;
   color: var(--coral);
+}
+
+.text-link .icon {
+  transition: transform 0.3s ease;
+}
+
+.text-link:hover {
+  text-decoration: none;
+}
+
+.text-link:hover .icon {
+  transform: rotate(12deg) scale(1.12);
 }
 
 /* ===== HERO ===== */
@@ -324,6 +354,39 @@ a:hover {
   position: relative;
   display: grid;
   gap: 30px;
+}
+
+/* Small entrance for the hero copy — no scroll library needed. */
+.hero-copy > * {
+  animation: rise-in 0.65s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+.hero-copy > *:nth-child(2) {
+  animation-delay: 0.07s;
+}
+
+.hero-copy > *:nth-child(3) {
+  animation-delay: 0.14s;
+}
+
+.hero-copy > *:nth-child(4) {
+  animation-delay: 0.21s;
+}
+
+.hero-copy > *:nth-child(5) {
+  animation-delay: 0.28s;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .eyebrow {
@@ -364,6 +427,43 @@ a:hover {
 
 .hero-art {
   display: none;
+}
+
+.hero-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 70%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 76, 76, 0.22), transparent);
+  animation: logo-glow 9s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes logo-float {
+  0%,
+  100% {
+    transform: translateY(-9px) rotate(-1.5deg);
+  }
+
+  50% {
+    transform: translateY(9px) rotate(1.5deg);
+  }
+}
+
+@keyframes logo-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 24px rgba(255, 76, 76, 0.2));
+    opacity: 0.75;
+  }
+
+  50% {
+    filter: drop-shadow(0 0 66px rgba(255, 76, 76, 0.45));
+    opacity: 1;
+  }
 }
 
 /* ===== SECTIONS ===== */
@@ -416,12 +516,13 @@ a:hover {
   background: var(--glass);
   border: 1px solid var(--border);
   border-radius: 14px;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 
 .card:hover {
   background: var(--glass2);
   border-color: var(--border2);
+  transform: translateY(-2px);
 }
 
 .card h3 {
@@ -684,6 +785,76 @@ a:hover {
   color: var(--coral);
 }
 
+/* ===== LEGAL PAGES (privacy / terms) ===== */
+.legal {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 44px 0 72px;
+}
+
+.legal h1 {
+  margin-bottom: 6px;
+  font-family: var(--font-h);
+  font-weight: 900;
+  font-size: clamp(1.6rem, 5vw, 2.1rem);
+  line-height: 1.2;
+  color: var(--coral);
+}
+
+.legal .updated {
+  margin-bottom: 30px;
+  font-family: var(--font-c);
+  font-size: 0.875rem;
+  letter-spacing: 1px;
+  color: var(--text3);
+}
+
+.legal h2 {
+  margin: 30px 0 10px;
+  font-family: var(--font-h);
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.35;
+  color: var(--coral);
+}
+
+.legal p,
+.legal li {
+  font-size: 1rem;
+  color: var(--text2);
+}
+
+.legal p + p {
+  margin-top: 12px;
+}
+
+.legal ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.legal li + li {
+  margin-top: 6px;
+}
+
+.legal a {
+  color: var(--coral);
+}
+
+.legal .back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 44px;
+  font-weight: 600;
+  color: var(--text2);
+}
+
+.legal .back:hover {
+  color: var(--coral);
+  text-decoration: none;
+}
+
 /* ===== NOSCRIPT ===== */
 .noscript-note {
   margin-top: 16px;
@@ -743,15 +914,6 @@ a:hover {
     color: var(--coral);
   }
 
-  .site-nav .btn {
-    margin-top: 0;
-    margin-left: 10px;
-  }
-
-  .site-nav .btn:hover {
-    color: #000;
-  }
-
   .hero {
     padding: 76px 0 88px;
   }
@@ -763,15 +925,18 @@ a:hover {
   }
 
   .hero-art {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .hero-art svg {
+  .hero-logo {
+    position: relative;
     width: min(100%, 320px);
     height: auto;
     filter: drop-shadow(0 0 60px var(--coral-glow));
+    animation: logo-float 9s ease-in-out infinite;
   }
 
   .hero-actions .btn {
@@ -812,10 +977,10 @@ a:hover {
 
 @media (min-width: 1280px) {
   .wrap {
-    max-width: 1240px;
+    padding: 0 24px;
   }
 
-  .hero-art svg {
+  .hero-logo {
     width: min(100%, 380px);
   }
 }

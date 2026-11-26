@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#050507" />
 <title>Project Gallery — BraxCode Digitals Foundation</title>
 <meta name="description" content="Projects built by BraxCode Digitals Foundation in Mwanza, Tanzania: AI tools, web apps, games and utilities. Browse the live demos." />
 <meta name="robots" content="index, follow" />
@@ -54,6 +56,7 @@
       padding: 0;
     }
 
+    html { background: #050507; }
     body {
       background: var(--bg);
       color: var(--text);
@@ -535,8 +538,12 @@
       font-weight: 700;
       color: var(--text);
       margin-bottom: 8px;
-      letter-spacing: 1px;
+      letter-spacing: 0.02em;
       line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .card-desc {
@@ -1031,6 +1038,10 @@
       }
     }
     @media (prefers-reduced-motion: reduce) {
+      @view-transition {
+        navigation: none;
+      }
+
       *,
       *::before,
       *::after {
@@ -1041,6 +1052,9 @@
       }
     }
 
+    @view-transition { navigation: auto; }
+    ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 180ms; }
+    nav { view-transition-name: site-header; }
   </style>
  <script>
     if (new URLSearchParams(window.location.search).get('embed') === '1') {

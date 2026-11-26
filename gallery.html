@@ -122,6 +122,14 @@
       border-bottom: 1px solid var(--border);
     }
 
+    html.embed nav {
+      display: none !important;
+    }
+
+    html.embed .hero {
+      padding-top: 50px;
+    }
+
 .nav-logo {
   display: flex;
   align-items: center;
@@ -983,6 +991,10 @@
         padding: 84px 16px 36px;
       }
 
+      html.embed .hero {
+        padding-top: 24px;
+      }
+
       .filters-wrap,
       .gallery-wrap {
         padding-left: 16px;
@@ -1030,6 +1042,11 @@
     }
 
   </style>
+ <script>
+    if (new URLSearchParams(window.location.search).get('embed') === '1') {
+      document.documentElement.classList.add('embed');
+    }
+  </script>
 </head>
 
 <body>

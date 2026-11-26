@@ -690,7 +690,7 @@ function openGallery() {
   const frame = document.getElementById('galleryFrame');
   if (panel) panel.classList.add('show');
   if (frame && (!frame.src || frame.src === window.location.href)) {
-    frame.src = 'gallery.html';
+    frame.src = 'gallery.html?embed=1';
   }
 }
 

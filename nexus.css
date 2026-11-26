@@ -13,8 +13,8 @@
   --border: rgba(255, 255, 255, 0.06);
   --border2: rgba(255, 76, 76, 0.25);
   --text: #f0f0f0;
-  --text2: #999;
-  --text3: #8a8a8a;
+  --text2: #9a9a9a;
+  --text3: #9a9a9a;
   --user-bg: rgba(255, 76, 76, 0.08);
   --font-h: "Orbitron", sans-serif;
   --font-b: "Rajdhani", sans-serif;
@@ -41,8 +41,9 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-b);
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.55;
   letter-spacing: 0.01em;
   display: flex;
   position: relative;
@@ -113,8 +114,8 @@ body::before {
 
 /* Sidebar */
 .sidebar {
-  width: 280px;
-  min-width: 280px;
+  width: 272px;
+  min-width: 272px;
   background: rgba(10, 10, 15, 0.85);
   backdrop-filter: blur(20px);
   border-right: 1px solid var(--border);
@@ -139,6 +140,8 @@ body::before {
   display: flex;
   align-items: center;
   gap: 10px;
+  text-decoration: none;
+  color: inherit;
 }
 
 .sidebar-brand svg {
@@ -149,13 +152,38 @@ body::before {
 
 .sidebar-brand-name {
   font-family: var(--font-h);
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   color: var(--text);
 }
 
 .sidebar-brand-name span {
   color: var(--coral);
+}
+
+.back-home {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  min-height: 44px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.back-home:hover,
+.back-home:focus-visible {
+  background: var(--glass2);
+  color: var(--coral);
+}
+
+.back-home svg {
+  flex-shrink: 0;
 }
 
 .new-chat-btn {
@@ -165,7 +193,8 @@ body::before {
   border: 1px solid var(--border2);
   color: var(--text);
   font-family: var(--font-b);
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -188,11 +217,11 @@ body::before {
 .sidebar-section-label {
   padding: 12px 16px 6px;
   font-size: 12px;
+  font-weight: 600;
   color: var(--text3);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-family: var(--font-b);
-  font-weight: 600;
 }
 
 .chat-list {
@@ -224,7 +253,8 @@ body::before {
 }
 
 .chat-item-text {
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: 500;
   color: var(--text2);
   white-space: nowrap;
   overflow: hidden;
@@ -288,7 +318,8 @@ body::before {
   border: 1px solid var(--border);
   text-decoration: none;
   color: var(--text);
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -311,7 +342,7 @@ body::before {
   display: flex;
   gap: 12px;
   padding: 0 4px;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text3);
 }
 
@@ -339,7 +370,7 @@ body::before {
 
 /* Topbar */
 .topbar {
-  min-height: 56px;
+  min-height: 52px;
   padding: 0 16px;
   padding-top: env(safe-area-inset-top, 0px);
   border-bottom: 1px solid var(--border);
@@ -399,12 +430,39 @@ body::before {
   display: none;
 }
 
-.topbar-brand {
-  display: flex;
+.topbar-mobile-brand {
+  display: none;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex: 1;
   min-width: 0;
+}
+
+.topbar-mobile-name {
+  font-family: var(--font-h);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar-mobile-name span {
+  color: var(--coral);
+}
+
+.topbar-convo-title {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-b);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .topbar-logo {
@@ -530,7 +588,8 @@ body::before {
   padding: 9px 12px;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: 500;
   color: var(--text2);
   transition: background 0.15s, color 0.15s;
 }
@@ -560,9 +619,13 @@ body::before {
 
 .messages-inner {
   max-width: 760px;
+  width: 100%;
   margin: 0 auto;
-  padding: 32px 20px 24px;
+  padding: 32px 20px 120px;
   position: relative;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .scroll-latest {
@@ -592,38 +655,26 @@ body::before {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 50vh;
   text-align: center;
   padding: 40px 20px;
+  margin: auto;
 }
 
 .welcome-logo {
-  width: 72px;
-  height: 72px;
+  width: 64px;
+  height: 64px;
   margin-bottom: 20px;
   filter: drop-shadow(0 0 16px var(--coral-glow));
-  animation: float 4s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-6px);
-  }
 }
 
 .welcome h1 {
   font-family: var(--font-h);
-  font-size: clamp(1.6rem, 4.5vw, 2.4rem);
-  font-weight: 700;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 800;
   margin-bottom: 12px;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+  max-width: 20ch;
 }
 
 .welcome h1 span {
@@ -632,7 +683,7 @@ body::before {
 
 .welcome p {
   color: var(--text2);
-  font-size: 16px;
+  font-size: 17px;
   max-width: 52ch;
   line-height: 1.6;
   margin-bottom: 32px;
@@ -641,13 +692,13 @@ body::before {
 .suggestions-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 12px;
   width: 100%;
-  max-width: 640px;
+  max-width: 680px;
 }
 
 .sug-card {
-  padding: 14px 12px;
+  padding: 14px;
   background: var(--glass);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -682,13 +733,14 @@ body::before {
 }
 
 .sug-card .s-title {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--text);
 }
 
 .sug-card .s-sub {
-  font-size: 13px;
+  font-size: 14.5px;
+  font-weight: 500;
   color: var(--text3);
   line-height: 1.4;
 }
@@ -788,7 +840,7 @@ body::before {
 .msg-bubble {
   padding: 12px 16px;
   border-radius: 16px;
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1.6;
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -975,7 +1027,7 @@ body::before {
   border-radius: var(--radius);
   cursor: pointer;
   font-family: var(--font-b);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   min-height: 44px;
   transition: background 0.2s;
@@ -1024,7 +1076,7 @@ body::before {
   outline: none;
   color: var(--text);
   font-family: var(--font-b);
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1.5;
   resize: none;
   max-height: 160px;
@@ -1131,7 +1183,8 @@ body::before {
   border-radius: 8px;
   cursor: pointer;
   font-family: var(--font-b);
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: 600;
   min-height: 36px;
 }
 
@@ -1142,7 +1195,15 @@ body::before {
 }
 
 /* Responsive */
-@media (max-width: 767px) {
+@media (max-width: 899px) {
+  .topbar-mobile-brand {
+    display: flex;
+  }
+
+  .topbar-convo-title {
+    display: none;
+  }
+
   .back-short {
     display: inline;
   }
@@ -1178,6 +1239,22 @@ body::before {
 
   .suggestions-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .sug-card {
+    padding: 12px;
+  }
+
+  .sug-card .s-sub {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .welcome-logo {
+    width: 48px;
+    height: 48px;
   }
 
   .welcome h1 {
@@ -1214,6 +1291,12 @@ body::before {
 
   .composer-box {
     padding: 6px 6px 6px 10px;
+  }
+}
+
+@media (max-height: 600px) {
+  .welcome-logo {
+    display: none;
   }
 }
 

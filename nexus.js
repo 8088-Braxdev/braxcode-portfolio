@@ -117,6 +117,7 @@ function newChat() {
   saveChats();
   currentChatId = id;
   renderChatList();
+  updateTopbarTitle();
   showEmptyChat();
   if (window.innerWidth <= 768) toggleSidebar();
 }
@@ -135,11 +136,14 @@ function showEmptyChat() {
       <p>Ask Nexus anything to get started.</p>
     </div>
   `;
+  const wrap2 = document.getElementById('messagesWrap');
+  if (wrap2) wrap2.scrollTop = 0;
 }
 
 function switchChat(id) {
   currentChatId = id;
   renderChatList();
+  updateTopbarTitle();
   renderMessages();
   if (window.innerWidth <= 768) toggleSidebar();
 }
@@ -152,9 +156,10 @@ function deleteChat(id, e) {
   if (currentChatId === id) {
     const rem = Object.keys(chats);
     if (rem.length > 0) switchChat(rem[rem.length - 1]);
-    else { currentChatId = null; showWelcome(); }
+    else { currentChatId = null; showWelcome(); updateTopbarTitle(); }
   }
   renderChatList();
+  updateTopbarTitle();
 }
 
 function updateChatTitle(id, firstMsg) {
@@ -168,6 +173,16 @@ function updateChatTitle(id, firstMsg) {
 function toggleQuickBar(show) {
   const bar = document.getElementById('quickBar');
   if (bar) bar.classList.toggle('show', !!show);
+}
+
+function updateTopbarTitle() {
+  const el = document.getElementById('topbarConvoTitle');
+  if (!el) return;
+  let title = 'New conversation';
+  if (currentChatId && chats[currentChatId]) {
+    title = chats[currentChatId].title || 'New conversation';
+  }
+  el.textContent = title;
 }
 
 /* ---------- RENDER CHAT LIST ---------- */
@@ -242,6 +257,8 @@ function showWelcome() {
       </div>
     </div>
   `;
+  const wrap = document.getElementById('messagesWrap');
+  if (wrap) wrap.scrollTop = 0;
 }
 
 /* ---------- RENDER MESSAGES ---------- */
@@ -649,6 +666,7 @@ function setupVisualViewport() {
 function renderInitialView() {
   if (currentChatId && chats[currentChatId]) renderMessages();
   else showWelcome();
+  updateTopbarTitle();
 }
 
 function ensureMessageArea() {

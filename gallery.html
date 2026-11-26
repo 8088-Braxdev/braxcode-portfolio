@@ -86,7 +86,6 @@
       background: rgba(255, 76, 76, 0.05);
       top: -150px;
       right: -150px;
-      animation: of 9s ease-in-out infinite;
     }
 
     .orb2 {
@@ -95,7 +94,6 @@
       background: rgba(255, 76, 76, 0.04);
       bottom: -80px;
       left: -80px;
-      animation: of 13s ease-in-out infinite reverse;
     }
 
     .orb3 {
@@ -104,23 +102,6 @@
       background: rgba(120, 40, 255, 0.03);
       top: 40%;
       left: 30%;
-      animation: of 11s ease-in-out infinite 2s;
-    }
-
-    @keyframes of {
-
-      0%,
-      100% {
-        transform: translate(0, 0) scale(1)
-      }
-
-      33% {
-        transform: translate(20px, -20px) scale(1.05)
-      }
-
-      66% {
-        transform: translate(-15px, 15px) scale(0.95)
-      }
     }
 
     /* NAV */
@@ -247,21 +228,6 @@
       height: 6px;
       border-radius: 50%;
       background: var(--coral);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-
-      0%,
-      100% {
-        opacity: 1;
-        transform: scale(1)
-      }
-
-      50% {
-        opacity: 0.5;
-        transform: scale(0.8)
-      }
     }
 
     .hero h1 {
@@ -879,13 +845,6 @@
       width: 60px;
       height: 60px;
       opacity: 0.3;
-      animation: spin 8s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg)
-      }
     }
 
     .status-title {
@@ -1059,6 +1018,17 @@
         text-align: center;
       }
     }
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
   </style>
 </head>
 

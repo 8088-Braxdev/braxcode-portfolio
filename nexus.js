@@ -22,6 +22,10 @@ let isPending = false;
 let isNearBottom = true;
 let chipTitle = null;
 
+function isTouchDevice() {
+  return !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+}
+
 /* ---------- DROPDOWN ---------- */
 function toggleDropdown() {
   document.getElementById('profileDropdown').classList.toggle('show');
@@ -477,7 +481,11 @@ async function sendMessage() {
   input.style.height = 'auto';
   input.style.overflowY = 'hidden';
   applyComposerMaxHeight();
-  try { input.focus({ preventScroll: true }); } catch (e) { input.focus(); }
+  if (isTouchDevice()) {
+    try { input.blur(); } catch (e) { /* ignore */ }
+  } else {
+    try { input.focus({ preventScroll: true }); } catch (e) { input.focus(); }
+  }
 
   const inner = document.getElementById('messagesInner');
   if (inner && inner.querySelector('.welcome')) inner.innerHTML = '';
@@ -553,6 +561,13 @@ function quickSend(text, title) {
   if (input) input.value = text;
   updateSendState();
   sendMessage();
+  if (isTouchDevice()) {
+    try {
+      if (document.activeElement && (document.activeElement === input || document.activeElement.classList.contains('chip'))) {
+        document.activeElement.blur();
+      }
+    } catch (e) { /* ignore */ }
+  }
 }
 
 /* ---------- INPUT ---------- */
@@ -590,13 +605,28 @@ function handleInput(el) {
     }
   }
   updateSendState();
+  const inner = document.getElementById('messagesInner');
+  const wrap = document.getElementById('messagesWrap');
+  if (wrap && inner && !inner.querySelector('.welcome') && isNearBottom) {
+    scrollToBottom();
+  }
 }
 
 function updateKeyboardState() {
   if (!window.visualViewport) return;
   const vv = window.visualViewport;
-  const kbOpen = (window.innerHeight - vv.height > 120) || (vv.height < 480);
-  document.body.classList.toggle('kb-open', kbOpen);
+  const focused = document.activeElement === document.getElementById('messageInput');
+  let kbOpen = (window.innerHeight - vv.height > 120) || (vv.height < 480);
+  if (isTouchDevice()) {
+    if (focused || vv.height < (0.75 * (window.screen && window.screen.availHeight ? window.screen.availHeight : window.innerHeight))) {
+      kbOpen = true;
+    } else if (vv.height >= 480 && window.innerHeight - vv.height <= 120) {
+      kbOpen = false;
+    }
+    document.body.classList.toggle('kb-open', kbOpen);
+  } else {
+    document.body.classList.toggle('kb-open', false);
+  }
   applyComposerMaxHeight();
   updateChipsState();
   const inner = document.getElementById('messagesInner');
@@ -680,16 +710,25 @@ function closeMission() {
 }
 
 /* ---------- VISUAL VIEWPORT ---------- */
-function setupVisualViewport() {
-  if (!window.visualViewport) return;
-  const vv = window.visualViewport;
-  const update = function () {
-    document.documentElement.style.setProperty('--app-height', vv.height + 'px');
-    updateKeyboardState();
-  };
-  update();
-  vv.addEventListener('resize', update);
-  vv.addEventListener('scroll', update);
+function syncAppViewport() {
+  try {
+    if (window.visualViewport) {
+      const vv = window.visualViewport;
+      document.documentElement.style.setProperty('--app-h', vv.height + 'px');
+      document.documentElement.style.setProperty('--app-top', vv.offsetTop + 'px');
+      if (document.scrollingElement && document.scrollingElement.scrollTop !== 0) {
+        window.scrollTo(0, 0);
+      }
+    } else {
+      document.documentElement.style.removeProperty('--app-h');
+      document.documentElement.style.removeProperty('--app-top');
+    }
+  } catch (e) { /* ignore */ }
+  updateKeyboardState();
+}
+
+function onAppViewportChange() {
+  syncAppViewport();
 }
 
 /* ---------- INIT ---------- */
@@ -710,15 +749,36 @@ function startApp() {
   try { renderInitialView(); } catch (err) { console.error('render welcome or active chat', err); }
   try { ensureMessageArea(); } catch (err) { console.error('welcome fallback', err); }
   setupScrollTracking();
-  setupVisualViewport();
+  syncAppViewport();
   applyComposerMaxHeight();
   updateKeyboardState();
+  window.addEventListener('resize', onAppViewportChange);
+  window.addEventListener('orientationchange', onAppViewportChange);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', onAppViewportChange);
+    window.visualViewport.addEventListener('scroll', onAppViewportChange);
+  }
   const input = document.getElementById('messageInput');
   if (input) {
     input.addEventListener('focus', function () {
       setTimeout(function () {
         if (isNearBottom) scrollToBottom();
       }, 200);
+    });
+    input.addEventListener('focusin', function () {
+      if (isTouchDevice()) document.body.classList.add('kb-open');
+      syncAppViewport();
+      setTimeout(syncAppViewport, 120);
+      setTimeout(syncAppViewport, 350);
+    });
+    input.addEventListener('focusout', function () {
+      if (isTouchDevice()) {
+        setTimeout(function () {
+          if (document.activeElement !== input) document.body.classList.remove('kb-open');
+        }, 100);
+      }
+      setTimeout(syncAppViewport, 120);
+      setTimeout(syncAppViewport, 350);
     });
   }
   updateSendState();
@@ -739,4 +799,10 @@ document.addEventListener('keydown', function (e) {
   if (sidebar && sidebar.classList.contains('open')) toggleSidebar();
   const drop = document.getElementById('profileDropdown');
   if (drop) drop.classList.remove('show');
+  const input = document.getElementById('messageInput');
+  if (input && document.activeElement === input) {
+    try { input.blur(); } catch (err) { /* ignore */ }
+    document.body.classList.remove('kb-open');
+    setTimeout(syncAppViewport, 120);
+  }
 });

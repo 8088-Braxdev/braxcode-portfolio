@@ -33,11 +33,19 @@
 
 html,
 body {
-  height: var(--app-height, 100dvh);
+  height: 100%;
+  margin: 0;
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 body {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: var(--app-top, 0px);
+  height: var(--app-h, 100dvh);
+  display: flex;
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-b);
@@ -45,8 +53,6 @@ body {
   font-weight: 500;
   line-height: 1.55;
   letter-spacing: 0.01em;
-  display: flex;
-  position: relative;
   background-image: radial-gradient(ellipse at top, rgba(255, 76, 76, 0.08), transparent 55%);
 }
 
@@ -615,6 +621,7 @@ body::before {
   overflow-y: auto;
   position: relative;
   scroll-behavior: smooth;
+  overscroll-behavior: contain;
 }
 
 .messages-inner {
@@ -1331,6 +1338,10 @@ body.kb-open .quick-chips {
 
 body.kb-open .composer-legal {
   display: none;
+}
+
+body.kb-open .composer {
+  padding-bottom: 8px;
 }
 
 body.kb-open .welcome-logo {

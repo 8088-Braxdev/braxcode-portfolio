@@ -934,20 +934,6 @@ a:hover {
   color: var(--coral);
 }
 
-.legal .back {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 44px;
-  font-weight: 600;
-  color: var(--text2);
-}
-
-.legal .back:hover {
-  color: var(--coral);
-  text-decoration: none;
-}
-
 /* ===== NOSCRIPT ===== */
 .noscript-note {
   margin-top: 16px;

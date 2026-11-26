@@ -689,60 +689,55 @@ body::before {
   margin-bottom: 32px;
 }
 
-.suggestions-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  width: 100%;
-  max-width: 680px;
-}
-
-.sug-card {
-  padding: 14px;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  cursor: pointer;
-  text-align: left;
-  transition: transform 0.2s, border-color 0.2s, background 0.2s;
-  color: var(--text);
+/* quick chips */
+.quick-chips {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-height: 44px;
-}
-
-.sug-card:hover,
-.sug-card:focus-visible {
-  background: var(--coral-dim);
-  border-color: var(--border2);
-  transform: translateY(-2px);
-}
-
-.sug-card .s-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: var(--coral-dim);
-  display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: center;
-  font-size: 16px;
-  color: var(--coral);
-  flex-shrink: 0;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 
-.sug-card .s-title {
-  font-size: 17px;
-  font-weight: 600;
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  min-height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--glass2);
   color: var(--text);
+  font-family: var(--font-b);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s, background 0.15s;
 }
 
-.sug-card .s-sub {
-  font-size: 14.5px;
-  font-weight: 500;
-  color: var(--text3);
-  line-height: 1.4;
+.chip:hover,
+.chip:focus-visible {
+  border-color: var(--border2);
+  background: var(--coral-dim);
+  transform: translateY(-1px);
+}
+
+.chip:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.chip svg {
+  width: 16px;
+  height: 16px;
+  color: var(--coral);
+}
+
+@media (pointer: coarse) {
+  .chip {
+    min-height: 44px;
+  }
 }
 
 /* Messages */
@@ -1054,13 +1049,10 @@ body::before {
 }
 
 .composer-box {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
   background: var(--glass2);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 8px 8px 8px 14px;
+  border-radius: 24px;
+  padding: 12px 14px 8px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -1070,7 +1062,7 @@ body::before {
 }
 
 #messageInput {
-  flex: 1;
+  width: 100%;
   background: transparent;
   border: none;
   outline: none;
@@ -1079,10 +1071,42 @@ body::before {
   font-size: 17px;
   line-height: 1.5;
   resize: none;
-  max-height: 160px;
-  min-height: 24px;
-  padding: 6px 0;
+  min-height: 56px;
+  max-height: 200px;
+  padding: 0;
   overflow-y: hidden;
+}
+
+#messageInput::-webkit-scrollbar {
+  width: 6px;
+}
+
+#messageInput::-webkit-scrollbar-button {
+  display: none;
+}
+
+#messageInput::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+}
+
+.composer-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.composer-hint {
+  font-size: 12px;
+  color: var(--text3);
+}
+
+@media (pointer: coarse) {
+  .composer-hint {
+    display: none;
+  }
 }
 
 #messageInput::placeholder {
@@ -1237,19 +1261,23 @@ body::before {
     display: none;
   }
 
-  .suggestions-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+  .quick-chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    justify-content: flex-start;
+    -webkit-mask-image: linear-gradient(to right, #000 85%, transparent 100%);
+    mask-image: linear-gradient(to right, #000 85%, transparent 100%);
   }
 
-  .sug-card {
-    padding: 12px;
+  .quick-chips::-webkit-scrollbar {
+    display: none;
   }
 
-  .sug-card .s-sub {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .chip {
+    scroll-snap-align: start;
+    flex: 0 0 auto;
   }
 
   .welcome-logo {
@@ -1265,6 +1293,10 @@ body::before {
     padding: 10px 12px 12px;
   }
 
+  #messageInput {
+    min-height: 44px;
+  }
+
   .composer-legal {
     display: none;
   }
@@ -1277,14 +1309,6 @@ body::before {
 }
 
 @media (max-width: 360px) {
-  .suggestions-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .sug-card {
-    padding: 10px 8px;
-  }
-
   .messages-inner {
     padding: 20px 12px 16px;
   }

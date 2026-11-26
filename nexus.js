@@ -20,6 +20,7 @@ let currentChatId = null;
 let chats = {};
 let isPending = false;
 let isNearBottom = true;
+let chipTitle = null;
 
 /* ---------- DROPDOWN ---------- */
 function toggleDropdown() {
@@ -137,7 +138,7 @@ function showEmptyChat() {
     </div>
   `;
   const wrap2 = document.getElementById('messagesWrap');
-  if (wrap2) wrap2.scrollTop = 0;
+  if (wrap2) requestAnimationFrame(function () { wrap2.scrollTop = 0; });
 }
 
 function switchChat(id) {
@@ -162,11 +163,13 @@ function deleteChat(id, e) {
   updateTopbarTitle();
 }
 
-function updateChatTitle(id, firstMsg) {
+function updateChatTitle(id, firstMsg, titleOverride) {
   if (chats[id]) {
-    chats[id].title = firstMsg.slice(0, 40) + (firstMsg.length > 40 ? '...' : '');
+    const base = (titleOverride && String(titleOverride).trim()) ? String(titleOverride).trim() : firstMsg;
+    chats[id].title = base.slice(0, 40) + (base.length > 40 ? '...' : '');
     saveChats();
     renderChatList();
+    updateTopbarTitle();
   }
 }
 
@@ -223,42 +226,9 @@ function showWelcome() {
       </svg>
       <h1>Welcome to <span>BraxCode</span> Digitals Foundation</h1>
       <p>We build AI systems, custom web apps &amp; digital solutions from Mwanza, Tanzania. Ask Nexus anything about our work - or explore below.</p>
-      <div class="suggestions-grid">
-        <button class="sug-card" onclick="showMission()">
-          <span class="s-icon"><svg class="icon" viewBox="0 0 384 512"><path d="M32 0C14.3 0 0 14.3 0 32V480c0 17.7 14.3 32 32 32H160V416c0-17.7 14.3-32 32-32s32 14.3 32 32v96H352c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H32zM64 240c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V240zm128-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H192c-8.8 0-16-7.2-16-16V240c0-8.8 7.2-16 16-16zm96 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H304c-8.8 0-16-7.2-16-16V240zM80 96h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16zm96 16c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H192c-8.8 0-16-7.2-16-16V112zm112-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H304c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16z"/></svg></span>
-          <div class="s-title">About Us</div>
-          <div class="s-sub">Mission &amp; Vision</div>
-        </button>
-        <button class="sug-card" onclick="quickSend('What services does BraxCode Digitals Foundation provide?')">
-          <span class="s-icon"><svg class="icon" viewBox="0 0 640 512"><path d="M308.5 135.3c7.1-6.3 9.9-16.2 6.2-25c-2.3-5.3-4.8-10.5-7.6-15.5L304 89.4c-3-5-6.3-9.9-9.8-14.6c-5.7-7.6-15.7-10.1-24.7-7.1l-28.2 9.3c-10.7-8.8-23-16-36.2-20.9L199 27.1c-1.9-9.3-9.1-16.7-18.5-17.8C173.9 8.4 167.2 8 160.4 8h-.7c-6.8 0-13.5 .4-20.1 1.2c-9.4 1.1-16.6 8.6-18.5 17.8L115.1 56c-13.3 5-25.5 12.1-36.2 20.9L50.7 67.6c-9-3-19-.5-24.7 7.1c-3.5 4.7-6.8 9.6-9.8 14.6l-3 5.4c-2.8 5-5.3 10.2-7.6 15.5c-3.7 8.7-.9 18.6 6.2 25l22.2 19.8C33.1 161.9 32 168.8 32 176s1.1 14.1 3.1 20.6L12.9 216.4c-7.1 6.3-9.9 16.2-6.2 25c2.3 5.3 4.8 10.4 7.6 15.5l3 5.4c3 5 6.3 9.9 9.8 14.6c5.7 7.6 15.7 10.1 24.7 7.1l28.2-9.3c10.7 8.8 23 16 36.2 20.9l6.8 28.9c1.9 9.3 9.1 16.7 18.5 17.8c6.7 .8 13.4 1.2 20.2 1.2s13.5-.4 20.1-1.2c9.4-1.1 16.6-8.6 18.5-17.8l6.8-28.9c13.3-5 25.5-12.1 36.2-20.9l28.2 9.3c9 3 19 .5 24.7-7.1c3.5-4.7 6.8-9.6 9.8-14.6l3-5.4c2.8-5 5.3-10.2 7.6-15.5c3.7-8.7 .9-18.6-6.2-25l-22.2-19.8c2-6.5 3.1-13.4 3.1-20.6s-1.1-14.1-3.1-20.6l22.2-19.8zM160 224a48 48 0 1 1 0-96 48 48 0 1 1 0 96zM616.2 425.9L586.4 406c2-6.5 3.1-13.4 3.1-20.6s-1.1-14.1-3.1-20.6l29.8-19.9c7.1-6.3 9.9-16.2 6.2-25c-2.3-5.3-4.8-10.4-7.6-15.5l-3-5.4c-3-5-6.3-9.9-9.8-14.6c-5.7-7.6-15.7-10.1-24.7-7.1l-33.4 11c-10.4-8.4-22.3-15.2-35.1-19.9l-8-34.3c-1.9-9.3-9.1-16.7-18.5-17.8c-6.7-.8-13.4-1.2-20.2-1.2s-13.5 .4-20.1 1.2c-9.4 1.1-16.6 8.6-18.5 17.8l-8 34.2c-12.9 4.7-24.7 11.5-35.1 19.9l-33.4-11c-9-3-19-.5-24.7 7.1c-3.5 4.7-6.8 9.6-9.8 14.6l-3 5.4c-2.8 5-5.3 10.2-7.6 15.5c-3.7 8.7-.9 18.6 6.2 25l29.8 19.9c-2 6.5-3.1 13.4-3.1 20.6s1.1 14.1 3.1 20.6l-29.8 19.9c-7.1 6.3-9.9 16.2-6.2 25c2.3 5.3 4.8 10.4 7.6 15.5l3 5.4c3 5 6.3 9.9 9.8 14.6c5.7 7.6 15.7 10.1 24.7 7.1l33.4-11c10.4 8.4 22.3 15.2 35.1 19.9l8 34.2c1.9 9.3 9.1 16.7 18.5 17.8c6.7 .8 13.4 1.2 20.2 1.2s13.5-.4 20.1-1.2c9.4-1.1 16.6-8.6 18.5-17.8l8-34.2c12.9-4.7 24.7-11.5 35.1-19.9l33.4 11c9 3 19 .5 24.7-7.1c3.5-4.7 6.8-9.6 9.8-14.6l3-5.4c2.8-5 5.3-10.2 7.6-15.5c3.7-8.7 .9-18.6-6.2-25zM480 432a48 48 0 1 1 0-96 48 48 0 1 1 0 96z"/></svg></span>
-          <div class="s-title">Services</div>
-          <div class="s-sub">What we build</div>
-        </button>
-        <button class="sug-card" onclick="quickSend('Show me the latest projects by BraxCode Digitals.')">
-          <span class="s-icon"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.315 7.584C12.195 3.883 16.695 1.5 21.75 1.5a.75.75 0 01.75.75c0 5.056-2.383 9.555-6.084 12.436A6.75 6.75 0 019.75 22.5a.75.75 0 01-.75-.75v-4.131A15.838 15.838 0 016.382 15H2.25a.75.75 0 01-.75-.75 6.75 6.75 0 017.815-6.666zM15 6.75a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" clip-rule="evenodd"/><path d="M5.26 17.242a.75.75 0 10-.897-1.203 5.243 5.243 0 00-2.05 5.022.75.75 0 00.625.627 5.243 5.243 0 005.022-2.051.75.75 0 10-1.202-.897 3.744 3.744 0 01-3.008 1.51c0-1.23.592-2.323 1.51-3.008z"/></svg></span>
-          <div class="s-title">Projects</div>
-          <div class="s-sub">Our work</div>
-        </button>
-        <button class="sug-card" onclick="quickSend('What are BraxCode Digitals main technical skills?')">
-          <span class="s-icon"><svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9.7 5.3a1 1 0 010 1.4L4.4 12l5.3 5.3a1 1 0 01-1.4 1.4l-6-6a1 1 0 010-1.4l6-6a1 1 0 011.4 0zm4.6 0a1 1 0 011.4 0l6 6a1 1 0 010 1.4l-6 6a1 1 0 01-1.4-1.4L19.6 12l-5.3-5.3a1 1 0 010-1.4z"/></svg></span>
-          <div class="s-title">Skills</div>
-          <div class="s-sub">Tech stack</div>
-        </button>
-        <button class="sug-card" onclick="quickSend('I would like to see the BraxCode company profile and CV.')">
-          <span class="s-icon"><svg class="icon" viewBox="0 0 384 512"><path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM112 256H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H272c8.8 0 16 7.2 16 16s-7.2 16-16 16H112c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/></svg></span>
-          <div class="s-title">Company Profile</div>
-          <div class="s-sub">Full CV</div>
-        </button>
-        <button class="sug-card" onclick="quickSend('How can I contact BraxCode Digitals Foundation?')">
-          <span class="s-icon"><svg class="icon" viewBox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg></span>
-          <div class="s-title">Contact</div>
-          <div class="s-sub">Get in touch</div>
-        </button>
-      </div>
-    </div>
   `;
   const wrap = document.getElementById('messagesWrap');
-  if (wrap) wrap.scrollTop = 0;
+  if (wrap) requestAnimationFrame(function () { wrap.scrollTop = 0; });
 }
 
 /* ---------- RENDER MESSAGES ---------- */
@@ -478,10 +448,12 @@ async function sendMessage() {
     renderChatList();
   }
 
-  if (chats[currentChatId].messages.length === 0) updateChatTitle(currentChatId, text);
+  if (chats[currentChatId].messages.length === 0) updateChatTitle(currentChatId, text, chipTitle);
+  chipTitle = null;
 
   chats[currentChatId].messages.push({ role: 'user', content: text });
   saveChats();
+  updateTopbarTitle();
 
   input.value = '';
   input.style.height = 'auto';
@@ -555,7 +527,8 @@ async function sendMessage() {
   }
 }
 
-function quickSend(text) {
+function quickSend(text, title) {
+  chipTitle = title || null;
   const input = document.getElementById('messageInput');
   if (input) input.value = text;
   updateSendState();
@@ -565,9 +538,9 @@ function quickSend(text) {
 /* ---------- INPUT ---------- */
 function handleInput(el) {
   el.style.height = 'auto';
-  const h = Math.min(el.scrollHeight, 160);
+  const h = Math.min(el.scrollHeight, 200);
   el.style.height = h + 'px';
-  if (el.scrollHeight > 160) el.style.overflowY = 'auto';
+  if (el.scrollHeight > 200) el.style.overflowY = 'auto';
   else el.style.overflowY = 'hidden';
 
   const counter = document.getElementById('charCounter');
@@ -580,6 +553,16 @@ function handleInput(el) {
     }
   }
   updateSendState();
+}
+
+function updateChipsState() {
+  const chips = document.querySelectorAll('.chip');
+  chips.forEach(function (c) { c.disabled = isPending; });
+  // hide chips when mobile keyboard open
+  const wrap = document.getElementById('quickChips');
+  if (wrap && window.visualViewport) {
+    wrap.style.display = window.visualViewport.height < 480 ? 'none' : '';
+  }
 }
 
 function handleKeydown(e) {
@@ -596,12 +579,15 @@ function updateSendState() {
   if (!btn || !input) return;
   const empty = input.value.trim().length === 0;
   btn.disabled = empty || isPending;
+  updateChipsState();
 }
 
 /* ---------- SCROLL ---------- */
 function scrollToBottom() {
   const wrap = document.getElementById('messagesWrap');
+  const inner = document.getElementById('messagesInner');
   if (!wrap) return;
+  if (inner && inner.querySelector('.welcome')) return;
   const behavior = (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'auto' : 'smooth';
   setTimeout(function () {
     wrap.scrollTo({ top: wrap.scrollHeight, behavior: behavior });
@@ -656,6 +642,7 @@ function setupVisualViewport() {
   const vv = window.visualViewport;
   const update = function () {
     document.documentElement.style.setProperty('--app-height', vv.height + 'px');
+    updateChipsState();
   };
   update();
   vv.addEventListener('resize', update);

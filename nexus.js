@@ -388,12 +388,6 @@ function escapeAttr(str) {
 
 /* ---------- FORMAT MESSAGE ---------- */
 function formatMsg(text) {
-  if (text.includes('[OPEN_GALLERY]')) {
-    text = text.replace('[OPEN_GALLERY]',
-      '<span onclick="openGallery()" style="color:var(--coral);cursor:pointer;text-decoration:underline;text-underline-offset:3px;">Open Gallery</span>'
-    );
-  }
-
   // Split out fenced code blocks first.
   const parts = [];
   const fenceRegex = /```([\s\S]*?)```/g;
@@ -406,12 +400,15 @@ function formatMsg(text) {
   }
   if (last < text.length) parts.push({ type: 'text', value: text.slice(last) });
 
-  return parts.map(function (part) {
+  const html = parts.map(function (part) {
     if (part.type === 'code') {
       return '<pre><code>' + escapeHtml(part.value.replace(/^\n/, '').replace(/\n$/, '')) + '</code></pre>';
     }
     return formatTextBlock(part.value);
   }).join('');
+  return html.replace(/\[OPEN_GALLERY\]/g,
+    '<span onclick="openGallery()" style="color:var(--coral);cursor:pointer;text-decoration:underline;text-underline-offset:3px;">Open Gallery</span>'
+  );
 }
 
 function formatTextBlock(text) {

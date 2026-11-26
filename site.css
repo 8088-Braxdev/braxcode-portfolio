@@ -30,8 +30,15 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  background: #050507;
   -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 92px;
+  }
 }
 
 body {
@@ -51,10 +58,17 @@ img {
 
 a {
   color: var(--coral);
+  text-decoration: none;
 }
 
 a:hover {
+  text-decoration: none;
+}
+
+.text-link {
   text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
 
 [hidden] {
@@ -159,7 +173,7 @@ a:hover {
   font-family: var(--font-h);
   font-weight: 700;
   font-size: 0.95rem;
-  letter-spacing: 1px;
+  letter-spacing: 0.02em;
 }
 
 .brand-sub {
@@ -241,8 +255,11 @@ a:hover {
   color: var(--text);
   font-size: 1rem;
   font-weight: 600;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.02em;
   border-radius: 8px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .site-nav > a:not(.btn):hover {
@@ -304,11 +321,7 @@ a:hover {
   transform: translateY(0);
 }
 
-.btn-sm {
-  min-height: 44px;
-  padding: 10px 18px;
-  font-size: 0.95rem;
-}
+
 
 .text-link {
   display: inline-flex;
@@ -393,7 +406,7 @@ a:hover {
   margin-bottom: 14px;
   font-family: var(--font-c);
   font-size: 0.875rem;
-  letter-spacing: 2px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--coral);
 }
@@ -464,7 +477,7 @@ a:hover {
   margin-bottom: 10px;
   font-family: var(--font-c);
   font-size: 0.875rem;
-  letter-spacing: 2px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--coral);
 }
@@ -553,6 +566,7 @@ a:hover {
 .project-card {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   background: var(--glass);
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -590,11 +604,20 @@ a:hover {
   font-weight: 700;
   font-size: 1rem;
   line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .project-desc {
   font-size: 0.9375rem;
   color: var(--text2);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-clamp: 3;
 }
 
 .project-tags {
@@ -629,6 +652,87 @@ a:hover {
   font-weight: 600;
 }
 
+/* ===== SKELETONS ===== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.project-skeleton {
+  pointer-events: none;
+}
+
+.skeleton-block,
+.skeleton-line,
+.skeleton-pill {
+  background: var(--glass2);
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-block::after,
+.skeleton-line::after,
+.skeleton-pill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.08) 50%, transparent 100%);
+  transform: translateX(-100%);
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton-line {
+  height: 12px;
+  margin-bottom: 8px;
+}
+
+.skeleton-title {
+  height: 16px;
+  width: 65%;
+}
+
+.skeleton-short {
+  width: 45%;
+}
+
+.skeleton-links {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.skeleton-pill {
+  width: 64px;
+  height: 16px;
+  border-radius: 999px;
+}
+
+.project-media-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text3);
+  font-size: 0.875rem;
+  background: var(--bg3);
+}
+
 /* ===== PRICING ===== */
 .price-card {
   display: flex;
@@ -639,7 +743,7 @@ a:hover {
 .price-label {
   font-family: var(--font-c);
   font-size: 0.875rem;
-  letter-spacing: 1px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text3);
 }
@@ -677,7 +781,7 @@ a:hover {
   font-family: var(--font-h);
   font-weight: 700;
   font-size: 1rem;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.02em;
   color: var(--coral);
 }
 
@@ -700,7 +804,7 @@ a:hover {
   margin-bottom: 18px;
   font-family: var(--font-c);
   font-size: 0.9375rem;
-  letter-spacing: 1px;
+  letter-spacing: 0.02em;
   color: var(--text2);
 }
 
@@ -708,7 +812,7 @@ a:hover {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .contact-actions .btn {
@@ -719,15 +823,17 @@ a:hover {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 22px;
+  gap: 8px 16px;
   font-size: 0.9375rem;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
 }
 
 .contact-links a {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  color: var(--text);
+  color: var(--text2);
   font-weight: 600;
 }
 
@@ -901,6 +1007,10 @@ a:hover {
     color: var(--coral);
   }
 
+  .site-nav > a.is-active {
+    color: var(--coral);
+  }
+
   .hero {
     padding: 76px 0 88px;
   }
@@ -984,4 +1094,27 @@ a:hover {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+
+  .skeleton-block::after,
+  .skeleton-line::after,
+  .skeleton-pill::after {
+    animation: none;
+  }
+
+  @view-transition {
+    navigation: none;
+  }
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 180ms;
+}
+
+.site-header {
+  view-transition-name: site-header;
 }

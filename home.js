@@ -137,10 +137,12 @@
   function renderProjects(projects) {
     var section = document.getElementById('projects');
     var grid = document.getElementById('projectGrid');
+    var navLink = document.getElementById('navProjects');
     if (!section || !grid) return;
 
     grid.replaceChildren.apply(grid, projects.map(buildProjectCard));
     section.hidden = false;
+    if (navLink) navLink.hidden = false;
   }
 
   async function loadProjects() {

@@ -438,31 +438,18 @@ a:hover {
   transform: translate(-50%, -50%);
   border-radius: 50%;
   background: radial-gradient(closest-side, rgba(255, 76, 76, 0.22), transparent);
-  animation: logo-glow 9s ease-in-out infinite;
   pointer-events: none;
 }
 
+/* Only a slow vertical float: no rotation, no breathing glow. */
 @keyframes logo-float {
   0%,
   100% {
-    transform: translateY(-9px) rotate(-1.5deg);
+    transform: translateY(0);
   }
 
   50% {
-    transform: translateY(9px) rotate(1.5deg);
-  }
-}
-
-@keyframes logo-glow {
-  0%,
-  100% {
-    filter: drop-shadow(0 0 24px rgba(255, 76, 76, 0.2));
-    opacity: 0.75;
-  }
-
-  50% {
-    filter: drop-shadow(0 0 66px rgba(255, 76, 76, 0.45));
-    opacity: 1;
+    transform: translateY(-6px);
   }
 }
 

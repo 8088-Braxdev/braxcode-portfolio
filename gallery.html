@@ -16,8 +16,13 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;700&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="preload" as="style"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+  </noscript>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <link rel="icon" type="image/x-icon" href="BraxCode-Logo.png">
 
   <style>
@@ -35,7 +40,7 @@
       --border2: rgba(255, 76, 76, 0.22);
       --text: #f0f0f0;
       --text2: #999;
-      --text3: #555;
+      --text3: #8a8a8a;
       --font-h: "Orbitron", sans-serif;
       --font-b: "Rajdhani", sans-serif;
       --font-c: "JetBrains Mono", monospace;
@@ -1146,7 +1151,8 @@
   <!-- MODAL -->
   <div id="modal" onclick="closeModal(event)">
     <div class="modal-box" id="modalBox">
-      <button class="modal-close" onclick="closeModalBtn()"><i class="fa-solid fa-xmark"></i></button>
+      <button class="modal-close" onclick="closeModalBtn()" aria-label="Close project details"><i
+          class="fa-solid fa-xmark" aria-hidden="true"></i></button>
       <div class="modal-img-wrap" id="modalImgWrap"></div>
       <div class="modal-body">
         <div class="modal-tags" id="modalTags"></div>
@@ -1178,7 +1184,22 @@
     // ======= SUPABASE CONFIG =======
     const SUPABASE_URL = 'https://lopjjyxeypggctwxgrjo.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_bGkDJCOyiE1srtMaxr1RRg_DAAHjxCf';
-    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    let sb = null;
+
+    function initSupabase() {
+      if (!window.supabase || typeof window.supabase.createClient !== 'function') {
+        showError();
+        return false;
+      }
+      try {
+        sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        return true;
+      } catch (err) {
+        console.error('Supabase init failed', err);
+        showError();
+        return false;
+      }
+    }
 
     const LOGO_SM = `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><circle cx="100" cy="100" r="88" fill="none" stroke="#ff4c4c" stroke-width="5"/><circle cx="100" cy="100" r="72" fill="none" stroke="#ff4c4c" stroke-width="2" stroke-dasharray="6 4" opacity="0.4"/><path d="M118 18 L68 105 L98 105 L82 182 L148 82 L112 82 Z" fill="#ff4c4c"/></svg>`;
 
@@ -1219,7 +1240,7 @@
     function buildCard(p) {
       const tags = getTags(p);
       const date = p.created_at ? new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : '';
-      const imgHTML = p.image_url ? `<img src="${p.image_url}" alt="${p.title}" loading="lazy"/>` : `<div class="card-img-placeholder">${LOGO_SM}</div>`;
+      const imgHTML = p.image_url ? `<img src="${p.image_url}" alt="${p.title || ''}" loading="lazy"/>` : `<div class="card-img-placeholder">${LOGO_SM}</div>`;
       const tagsHTML = tags.map(t => `<span class="card-tag">${t.trim()}</span>`).join('');
       const liveBtn = p.live_url
         ? `<a class="card-btn primary" href="${p.live_url}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live</a>`
@@ -1228,7 +1249,7 @@
         <div class="card-img-wrap">${imgHTML}<div class="card-overlay">${tagsHTML}</div></div>
         <div class="card-body">
           <div class="card-title">${p.title}</div>
-          <div class="card-desc">${p.description}</div>
+          <div class="card-desc">${p.description || ''}</div>
           <div class="card-footer"><span class="card-date">${date}</span><div class="card-links">${liveBtn}</div></div>
         </div>
       </div>`;
@@ -1239,10 +1260,10 @@
       if (!p) return;
       const tags = getTags(p);
       const features = getFeatures(p);
-      document.getElementById('modalImgWrap').innerHTML = p.image_url ? `<img src="${p.image_url}" alt="${p.title}"/>` : `<div class="modal-img-ph">${LOGO_SM}</div>`;
+      document.getElementById('modalImgWrap').innerHTML = p.image_url ? `<img src="${p.image_url}" alt="${p.title || ''}"/>` : `<div class="modal-img-ph">${LOGO_SM}</div>`;
       document.getElementById('modalTags').innerHTML = tags.map(t => `<span class="modal-tag">${t.trim()}</span>`).join('');
       document.getElementById('modalTitle').textContent = p.title;
-      document.getElementById('modalDesc').textContent = p.description;
+      document.getElementById('modalDesc').textContent = p.description || '';
       document.getElementById('modalFeatures').innerHTML = features.length ? `<div class="modal-feat-title">Core Features</div><ul class="feature-list">${features.map(f => `<li>${f.trim()}</li>`).join('')}</ul>` : '';
       let actions = '';
       if (p.live_url) actions += `<a class="modal-btn primary" href="${p.live_url}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> View Live</a>`;
@@ -1270,11 +1291,13 @@
     function applyFilters() {
       let filtered = allProjects;
       if (activeFilter !== 'all') filtered = filtered.filter(p => getTags(p).some(t => t.trim().toLowerCase() === activeFilter.toLowerCase()));
-      if (searchQuery) filtered = filtered.filter(p => p.title.toLowerCase().includes(searchQuery) || p.description.toLowerCase().includes(searchQuery));
+      if (searchQuery) filtered = filtered.filter(p => (p.title || '').toLowerCase().includes(searchQuery) || (p.description || '').toLowerCase().includes(searchQuery));
       renderGrid(filtered);
     }
 
-    loadProjects();
+    document.addEventListener('DOMContentLoaded', function () {
+      if (initSupabase()) loadProjects();
+    });
   </script>
 </body>
 

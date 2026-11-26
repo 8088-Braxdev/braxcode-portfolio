@@ -303,7 +303,8 @@ async function confirmOrder(id) {
   window.open('https://wa.me/255618811359?text=' + encodeURIComponent(msg), '_blank');
 }
 
-function buildMsgHTML(role, content) {
+function buildMsgHTML(role, content, options) {
+  options = options || {};
   const isBot = role === 'assistant';
   if (isBot) {
     const order = parseOrderSummary(content);
@@ -311,12 +312,20 @@ function buildMsgHTML(role, content) {
   }
   const avatar = userProfile.avatar;
   const name = userProfile.name || 'You';
+  const showActions = isBot && options.actions !== false;
 
   const avHTML = isBot
     ? `<div class="msg-av bot">${LOGO_SVG}</div>`
     : `<div class="msg-av usr">${avatar ? `<img src="${escapeAttr(avatar)}" alt=""/>` : '<svg class="icon" style="font-size:0.65rem" viewBox="0 0 448 512"><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/></svg>'}</div>`;
 
-  const copyBtn = isBot ? '<button class="copy-btn" type="button" aria-label="Copy message" onclick="copyMessage(this)">Copy</button>' : '';
+  const copyIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+  const actions = showActions ? `
+      <div class="msg-actions">
+        <button class="action-btn" type="button" aria-label="Copy response" onclick="copyMessage(this)">
+          ${copyIcon}
+        </button>
+        <span class="copy-status" aria-live="polite"></span>
+      </div>` : '';
 
   return `
     <div class="message-row ${isBot ? '' : 'user'}">
@@ -324,19 +333,28 @@ function buildMsgHTML(role, content) {
       <div class="msg-content">
         <div class="msg-name">${isBot ? 'Nexus ' + SPARK_SVG : escapeHtml(name)}</div>
         <div class="msg-bubble ${isBot ? 'bot' : 'usr'}">${formatMsg(content)}</div>
-        ${copyBtn}
+        ${actions}
       </div>
     </div>
   `;
 }
 
+const COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+const CHECK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="#ff4c4c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
+
 function copyMessage(btn) {
   const row = btn.closest('.message-row');
   const bubble = row ? row.querySelector('.msg-bubble') : null;
   const text = bubble ? bubble.innerText : '';
+  const status = row ? row.querySelector('.copy-status') : null;
+  const original = btn.innerHTML;
   const done = function () {
-    btn.textContent = 'Copied';
-    setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
+    btn.innerHTML = CHECK_ICON;
+    if (status) status.textContent = 'Copied';
+    setTimeout(function () {
+      btn.innerHTML = original || COPY_ICON;
+      if (status) status.textContent = '';
+    }, 1500);
   };
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(done).catch(function () {
@@ -458,6 +476,8 @@ async function sendMessage() {
   input.value = '';
   input.style.height = 'auto';
   input.style.overflowY = 'hidden';
+  applyComposerMaxHeight();
+  try { input.focus({ preventScroll: true }); } catch (e) { input.focus(); }
 
   const inner = document.getElementById('messagesInner');
   if (inner && inner.querySelector('.welcome')) inner.innerHTML = '';
@@ -519,7 +539,7 @@ async function sendMessage() {
     const msg = err && err.name === 'AbortError'
       ? 'Network is slow - please try again with a better connection.'
       : 'Connection issue - please check your network and try again.';
-    if (inner) inner.innerHTML += buildMsgHTML('assistant', msg);
+    if (inner) inner.innerHTML += buildMsgHTML('assistant', msg, { actions: false });
     if (isNearBottom) scrollToBottom();
   } finally {
     isPending = false;
@@ -536,11 +556,28 @@ function quickSend(text, title) {
 }
 
 /* ---------- INPUT ---------- */
+function applyComposerMaxHeight() {
+  const el = document.getElementById('messageInput');
+  if (!el) return;
+  let max = 200;
+  if (window.innerWidth < 900 && window.visualViewport) {
+    const vv = window.visualViewport;
+    max = Math.min(160, Math.max(88, 0.30 * vv.height));
+    if (document.body.classList.contains('kb-open')) {
+      max = Math.min(max, 0.35 * vv.height);
+    }
+  }
+  el.style.maxHeight = Math.round(max) + 'px';
+  return max;
+}
+
 function handleInput(el) {
+  applyComposerMaxHeight();
   el.style.height = 'auto';
-  const h = Math.min(el.scrollHeight, 200);
+  const max = parseFloat(el.style.maxHeight) || 200;
+  const h = Math.min(el.scrollHeight, max);
   el.style.height = h + 'px';
-  if (el.scrollHeight > 200) el.style.overflowY = 'auto';
+  if (el.scrollHeight > max) el.style.overflowY = 'auto';
   else el.style.overflowY = 'hidden';
 
   const counter = document.getElementById('charCounter');
@@ -553,6 +590,20 @@ function handleInput(el) {
     }
   }
   updateSendState();
+}
+
+function updateKeyboardState() {
+  if (!window.visualViewport) return;
+  const vv = window.visualViewport;
+  const kbOpen = (window.innerHeight - vv.height > 120) || (vv.height < 480);
+  document.body.classList.toggle('kb-open', kbOpen);
+  applyComposerMaxHeight();
+  updateChipsState();
+  const inner = document.getElementById('messagesInner');
+  const wrap = document.getElementById('messagesWrap');
+  if (wrap && inner && !inner.querySelector('.welcome') && isNearBottom) {
+    scrollToBottom();
+  }
 }
 
 function updateChipsState() {
@@ -596,19 +647,11 @@ function scrollToBottom() {
 
 function setupScrollTracking() {
   const wrap = document.getElementById('messagesWrap');
-  const btn = document.getElementById('scrollLatest');
   if (!wrap) return;
   wrap.addEventListener('scroll', function () {
     const distance = wrap.scrollHeight - wrap.scrollTop - wrap.clientHeight;
     isNearBottom = distance < 120;
-    if (btn) btn.hidden = isNearBottom;
   });
-  if (btn) {
-    btn.addEventListener('click', function () {
-      const behavior = (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) ? 'auto' : 'smooth';
-      wrap.scrollTo({ top: wrap.scrollHeight, behavior: behavior });
-    });
-  }
 }
 
 /* ---------- GALLERY / MISSION ---------- */
@@ -642,7 +685,7 @@ function setupVisualViewport() {
   const vv = window.visualViewport;
   const update = function () {
     document.documentElement.style.setProperty('--app-height', vv.height + 'px');
-    updateChipsState();
+    updateKeyboardState();
   };
   update();
   vv.addEventListener('resize', update);
@@ -668,6 +711,8 @@ function startApp() {
   try { ensureMessageArea(); } catch (err) { console.error('welcome fallback', err); }
   setupScrollTracking();
   setupVisualViewport();
+  applyComposerMaxHeight();
+  updateKeyboardState();
   const input = document.getElementById('messageInput');
   if (input) {
     input.addEventListener('focus', function () {

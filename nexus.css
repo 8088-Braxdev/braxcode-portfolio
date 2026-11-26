@@ -628,28 +628,6 @@ body::before {
   flex-direction: column;
 }
 
-.scroll-latest {
-  position: absolute;
-  right: 24px;
-  bottom: 16px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid var(--border2);
-  background: var(--bg2);
-  color: var(--coral);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  z-index: 5;
-}
-
-.scroll-latest[hidden] {
-  display: none;
-}
-
 /* Welcome */
 .welcome {
   display: flex;
@@ -715,11 +693,19 @@ body::before {
   transition: border-color 0.15s, transform 0.15s, background 0.15s;
 }
 
-.chip:hover,
+@media (hover: hover) {
+  .chip:hover {
+    border-color: var(--border2);
+    background: var(--coral-dim);
+    transform: translateY(-1px);
+  }
+}
+
 .chip:focus-visible {
   border-color: var(--border2);
   background: var(--coral-dim);
-  transform: translateY(-1px);
+  outline: 2px solid var(--coral);
+  outline-offset: 2px;
 }
 
 .chip:disabled {
@@ -906,42 +892,52 @@ body::before {
   margin: 2px 0;
 }
 
-/* Copy button */
-.copy-btn {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: var(--glass2);
-  border: 1px solid var(--border);
+/* Message action row */
+.msg-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
   color: var(--text3);
-  border-radius: 6px;
-  padding: 4px 6px;
-  font-size: 12px;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.15s, color 0.15s;
-  min-width: 32px;
-  min-height: 32px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
 }
 
-.message-row:hover .copy-btn,
-.message-row:focus-within .copy-btn {
-  opacity: 1;
+.action-btn:hover,
+.action-btn:focus-visible {
+  background: var(--glass2);
+  color: var(--text);
+}
+
+.action-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.copy-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 @media (pointer: coarse) {
-  .copy-btn {
-    opacity: 1;
+  .action-btn {
+    padding: 6px;
   }
-}
-
-.copy-btn:hover,
-.copy-btn:focus-visible {
-  color: var(--coral);
-  border-color: var(--border2);
 }
 
 /* Typing */
@@ -1049,10 +1045,13 @@ body::before {
 }
 
 .composer-box {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
   background: var(--glass2);
   border: 1px solid var(--border);
   border-radius: 24px;
-  padding: 12px 14px 8px;
+  padding: 6px 6px 6px 16px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -1062,18 +1061,17 @@ body::before {
 }
 
 #messageInput {
-  width: 100%;
+  flex: 1 1 0;
+  min-width: 0;
   background: transparent;
   border: none;
   outline: none;
   color: var(--text);
   font-family: var(--font-b);
   font-size: 17px;
-  line-height: 1.5;
+  line-height: 1.4;
   resize: none;
-  min-height: 56px;
-  max-height: 200px;
-  padding: 0;
+  padding: 10px 0;
   overflow-y: hidden;
 }
 
@@ -1090,23 +1088,11 @@ body::before {
   border-radius: 3px;
 }
 
-.composer-toolbar {
+.char-counter-row {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-.composer-hint {
-  font-size: 12px;
-  color: var(--text3);
-}
-
-@media (pointer: coarse) {
-  .composer-hint {
-    display: none;
-  }
+  justify-content: flex-end;
+  margin-bottom: 4px;
+  min-height: 14px;
 }
 
 #messageInput::placeholder {
@@ -1114,6 +1100,7 @@ body::before {
 }
 
 .send-btn {
+  position: relative;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -1125,7 +1112,21 @@ body::before {
   justify-content: center;
   color: #000;
   flex-shrink: 0;
+  align-self: flex-end;
   transition: background 0.2s, opacity 0.2s, transform 0.2s;
+}
+
+.send-btn::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+}
+
+@media (pointer: coarse) {
+  .send-btn::after {
+    inset: -4px;
+  }
 }
 
 .send-btn:disabled {
@@ -1294,7 +1295,7 @@ body::before {
   }
 
   #messageInput {
-    min-height: 44px;
+    font-size: 16px;
   }
 
   .composer-legal {
@@ -1321,6 +1322,42 @@ body::before {
 @media (max-height: 600px) {
   .welcome-logo {
     display: none;
+  }
+}
+
+body.kb-open .quick-chips {
+  display: none;
+}
+
+body.kb-open .composer-legal {
+  display: none;
+}
+
+body.kb-open .welcome-logo {
+  display: none;
+}
+
+body.kb-open .welcome h1 {
+  font-size: clamp(1.25rem, 5vw, 1.6rem);
+  margin-bottom: 8px;
+}
+
+body.kb-open .welcome p {
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+@media (max-height: 560px) {
+  .welcome-logo {
+    display: none;
+  }
+
+  .welcome h1 {
+    font-size: clamp(1.25rem, 5vw, 1.6rem);
+  }
+
+  .welcome p {
+    font-size: 15px;
   }
 }
 

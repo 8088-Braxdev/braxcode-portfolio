@@ -803,6 +803,23 @@ a:hover {
   }
 }
 
+/* ===== WIDE DESKTOP ===== */
+@media (min-width: 980px) {
+  #pricing .card-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .wrap {
+    max-width: 1240px;
+  }
+
+  .hero-art svg {
+    width: min(100%, 380px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

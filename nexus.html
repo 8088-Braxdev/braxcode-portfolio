@@ -436,6 +436,26 @@
       padding: 4px;
     }
 
+    /* ============================
+         TOPBAR BACK LINK (mobile)
+      ============================*/
+    .topbar-back {
+      display: none;
+      align-items: center;
+      font-family: var(--font-b);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text2);
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .topbar-back:hover,
+    .topbar-back:focus-visible {
+      color: var(--coral);
+    }
+
 .topbar-brand {
   display: flex;
   align-items: center;
@@ -1042,26 +1062,6 @@
 
     .haptic {
       animation: haptic 0.3s ease;
-    }
-
-    /* ============================
-         TOPBAR BACK LINK (mobile)
-      ============================*/
-    .topbar-back {
-      display: none;
-      align-items: center;
-      font-family: var(--font-b);
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--text2);
-      text-decoration: none;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .topbar-back:hover,
-    .topbar-back:focus-visible {
-      color: var(--coral);
     }
 
     /* ============================

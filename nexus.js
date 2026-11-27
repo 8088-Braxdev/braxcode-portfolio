@@ -1,18 +1,4 @@
 /* Nexus AI - client logic */
-let sbOrders = null;
-try {
-  if (window.supabase && typeof window.supabase.createClient === 'function') {
-    sbOrders = supabase.createClient(
-      'https://lopjjyxeypggctwxgrjo.supabase.co',
-      'sb_publishable_bGkDJCOyiE1srtMaxr1RRg_DAAHjxCf'
-    );
-  } else {
-    console.warn('Supabase library unavailable - order saving disabled');
-  }
-} catch (err) {
-  console.error('Supabase init failed - order saving disabled', err);
-}
-
 const userProfile = { name: '', avatar: '' };
 
 let pendingOrders = {};
@@ -296,12 +282,14 @@ function buildOrderCardHTML(order) {
 async function confirmOrder(id) {
   const order = pendingOrders[id];
   if (!order) return;
-  if (sbOrders) {
-    try {
-      await sbOrders.from('orders').insert([order]);
-    } catch (err) {
-      console.error('Order save failed', err);
-    }
+  try {
+    await fetch('/api/submit-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(order)
+    });
+  } catch (err) {
+    console.error('Order save failed', err);
   }
   const msg = 'Hi BraxCode! I spoke with Nexus AI and here is my project brief:\n\nProject: ' + order.project + '\nScope: ' + order.scope + '\nBudget: ' + order.budget + '\nTimeline: ' + order.timeline + '\nContact: ' + order.contact;
   window.open('https://wa.me/255618811359?text=' + encodeURIComponent(msg), '_blank');

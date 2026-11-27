@@ -7,6 +7,7 @@ let chats = {};
 let isPending = false;
 let isNearBottom = true;
 let chipTitle = null;
+let confirmResolve = null;
 
 function isTouchDevice() {
   return !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
@@ -26,15 +27,46 @@ document.addEventListener('click', function (e) {
   }
 });
 
-function clearHistory() {
-  if (confirm('Clear all chat history?')) {
-    chats = {};
-    saveChats();
-    currentChatId = null;
-    renderChatList();
-    showWelcome();
-    document.getElementById('profileDropdown').classList.remove('show');
+function closeConfirmDialog(result) {
+  const overlay = document.getElementById('confirmOverlay');
+  if (!overlay || overlay.hidden) return;
+  overlay.hidden = true;
+  if (confirmResolve) {
+    const resolve = confirmResolve;
+    confirmResolve = null;
+    resolve(!!result);
   }
+}
+
+function openConfirmDialog(message) {
+  return new Promise(function (resolve) {
+    const overlay = document.getElementById('confirmOverlay');
+    const title = document.getElementById('confirmTitle');
+    if (!overlay) {
+      resolve(false);
+      return;
+    }
+    if (title) title.textContent = message;
+    confirmResolve = resolve;
+    overlay.hidden = false;
+    const ok = document.getElementById('confirmOk');
+    if (ok) {
+      try { ok.focus(); } catch (e) { /* ignore */ }
+    }
+  });
+}
+
+async function clearHistory() {
+  const dropdown = document.getElementById('profileDropdown');
+  if (dropdown) dropdown.classList.remove('show');
+  const ok = await openConfirmDialog('Clear all chat history?');
+  if (!ok) return;
+
+  chats = {};
+  saveChats();
+  currentChatId = null;
+  renderChatList();
+  showWelcome();
 }
 
 /* ---------- HAPTIC ---------- */
@@ -781,6 +813,7 @@ if (document.readyState === 'loading') {
 /* ---------- KEYBOARD ---------- */
 document.addEventListener('keydown', function (e) {
   if (e.key !== 'Escape') return;
+  closeConfirmDialog(false);
   closeGallery();
   closeMission();
   const sidebar = document.getElementById('sidebar');
